@@ -116,6 +116,154 @@ function CameraVideo({ src, className }) {
   );
 }
 
+function EmbeddedMatrixDashboard({ onBack }) {
+  const [reidLogs] = useState([
+    { id: 'REID-901', time: '16:18:02', vehicleId: 'VEH_GLOBAL_0001', fromCam: 'CAM-001', toCam: 'CAM-002', plate: 'GJ-01-AB-1234', conf: '98.4%', target: '👤 CITIZEN: CLEAR', targetStatus: 'CLEAR' },
+    { id: 'REID-902', time: '16:18:15', vehicleId: 'VEH_GLOBAL_0003', fromCam: 'CAM-002', toCam: 'CAM-004', plate: 'GJ-05-CD-3321', conf: '96.2%', target: '🚨 WANTED: Shahrukh Khan', targetStatus: 'WANTED' },
+    { id: 'REID-903', time: '16:18:30', vehicleId: 'VEH_GLOBAL_0005', fromCam: 'CAM-003', toCam: 'CAM-005', plate: 'GJ-06-ZZ-9900', conf: '95.8%', target: '🚨 WANTED: Ajay Devgan', targetStatus: 'WANTED' },
+    { id: 'REID-904', time: '16:18:44', vehicleId: 'VEH_GLOBAL_0002', fromCam: 'CAM-001', toCam: 'CAM-003', plate: 'GJ-01-XY-5678', conf: '94.7%', target: '👤 CITIZEN: CLEAR', targetStatus: 'CLEAR' },
+    { id: 'REID-905', time: '16:19:01', vehicleId: 'VEH_GLOBAL_0004', fromCam: 'CAM-004', toCam: 'CAM-005', plate: 'GJ-18-Z-4411', conf: '97.1%', target: '👤 CITIZEN: CLEAR', targetStatus: 'CLEAR' },
+  ]);
+
+  return (
+    <div className="w-full bg-command-card rounded-xl border border-cyan-500/50 p-4 space-y-4 shadow-2xl font-mono">
+      {/* Top Header */}
+      <div className="flex items-center justify-between p-3 bg-black/80 rounded-lg border border-cyan-500/30">
+        <div className="flex items-center gap-3">
+          <span className="w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
+          <h2 className="text-sm font-bold text-cyan-300">
+            SENTINEL AI 2.0 MATRIX — FULL COMMAND CENTER DASHBOARD
+          </h2>
+          <span className="text-[10px] bg-cyan-950 text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/40 font-bold">
+            LIVE VERIFIED MATRIX
+          </span>
+        </div>
+        <button
+          onClick={onBack}
+          className="px-3 py-1 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded border border-cyan-500/40 text-xs font-bold transition"
+        >
+          ✕ RETURN TO CAMERA GRID
+        </button>
+      </div>
+
+      {/* Top 5 KPI Summary Strip */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
+        <div className="bg-command-bg p-3 rounded-lg border border-cyan-500/30 flex justify-between items-center">
+          <div>
+            <div className="text-[10px] text-slate-400">ACTIVE CAMERAS</div>
+            <div className="text-xl font-extrabold text-cyan-400">5 / 5</div>
+          </div>
+          <Activity className="w-6 h-6 text-cyan-400 opacity-60" />
+        </div>
+        <div className="bg-command-bg p-3 rounded-lg border border-amber-500/30 flex justify-between items-center">
+          <div>
+            <div className="text-[10px] text-slate-400">VEHICLES DETECTED</div>
+            <div className="text-xl font-extrabold text-amber-400">1,284</div>
+          </div>
+          <Zap className="w-6 h-6 text-amber-400 opacity-60" />
+        </div>
+        <div className="bg-command-bg p-3 rounded-lg border border-emerald-500/30 flex justify-between items-center">
+          <div>
+            <div className="text-[10px] text-slate-400">UNIQUE VEHICLES</div>
+            <div className="text-xl font-extrabold text-emerald-400">412</div>
+          </div>
+          <Layers className="w-6 h-6 text-emerald-400 opacity-60" />
+        </div>
+        <div className="bg-command-bg p-3 rounded-lg border border-purple-500/30 flex justify-between items-center">
+          <div>
+            <div className="text-[10px] text-slate-400">PLATES RECOGNIZED</div>
+            <div className="text-xl font-extrabold text-purple-400">389</div>
+          </div>
+          <ShieldAlert className="w-6 h-6 text-purple-400 opacity-60" />
+        </div>
+        <div className="bg-command-bg p-3 rounded-lg border border-rose-500/30 flex justify-between items-center">
+          <div>
+            <div className="text-[10px] text-slate-400">CROSS-CAM MATCHES</div>
+            <div className="text-xl font-extrabold text-rose-400">87</div>
+          </div>
+          <Eye className="w-6 h-6 text-rose-400 opacity-60" />
+        </div>
+      </div>
+
+      {/* 5-Camera Surveillance Stream Grid */}
+      <div className="space-y-2">
+        <h3 className="text-xs font-bold text-slate-300 flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+          SURVEILLANCE MATRIX — CONCURRENT MULTI-STREAM FEEDS
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          {CAMERAS.map((c) => (
+            <div key={c.id} className="relative bg-command-bg rounded-lg border border-command-border overflow-hidden">
+              <div className="relative aspect-video">
+                <CameraVideo src={c.videoUrl} className="w-full h-full object-cover" />
+                <div className="absolute top-1 left-1 bg-black/80 px-1.5 py-0.5 rounded text-[9px] text-cyan-300 font-bold">
+                  {c.id}
+                </div>
+                <div className="absolute bottom-1 left-1 bg-black/80 px-1.5 py-0.5 rounded text-[9px] text-slate-200">
+                  {c.name.split('-')[0]}
+                </div>
+              </div>
+              <div className="p-2 text-[10px] space-y-1">
+                <div className="flex justify-between text-slate-400">
+                  <span>LIMIT: {c.speedLimit} KM/H</span>
+                  <span className="text-emerald-400 font-bold">ONLINE</span>
+                </div>
+                <div className="text-cyan-300 font-bold truncate">{c.type}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Cross-Camera Vehicle Re-ID Audit Log Table */}
+      <div className="bg-command-bg p-3 rounded-lg border border-command-border space-y-2 text-xs">
+        <div className="flex justify-between items-center border-b border-command-border pb-2">
+          <h3 className="font-bold text-slate-200 flex items-center gap-2">
+            <Layers className="w-4 h-4 text-cyan-400" />
+            CROSS-CAMERA VEHICLE RE-IDENTIFICATION & WATCHLIST MATCH LOGS
+          </h3>
+          <span className="text-[10px] text-emerald-400 font-bold">LIVE TELEMETRY SYNCED</span>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-[11px]">
+            <thead>
+              <tr className="border-b border-command-border/60 text-slate-400">
+                <th className="py-1.5 px-2">TIMESTAMP</th>
+                <th className="py-1.5 px-2">GLOBAL ID</th>
+                <th className="py-1.5 px-2">ROUTE MATCH</th>
+                <th className="py-1.5 px-2">ANPR PLATE</th>
+                <th className="py-1.5 px-2">CONFIDENCE</th>
+                <th className="py-1.5 px-2">FACE RECOGNITION STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {reidLogs.map((log) => (
+                <tr key={log.id} className="border-b border-command-border/40 hover:bg-cyan-950/20">
+                  <td className="py-1.5 px-2 text-slate-400">{log.time}</td>
+                  <td className="py-1.5 px-2 font-bold text-cyan-300">{log.vehicleId}</td>
+                  <td className="py-1.5 px-2 text-slate-300">{log.fromCam} ➔ {log.toCam}</td>
+                  <td className="py-1.5 px-2 font-bold text-amber-300">{log.plate}</td>
+                  <td className="py-1.5 px-2 text-emerald-400 font-bold">{log.conf}</td>
+                  <td className="py-1.5 px-2">
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                      log.targetStatus === 'WANTED' 
+                        ? 'bg-rose-950 text-rose-300 border border-rose-600 animate-pulse' 
+                        : 'bg-emerald-950 text-emerald-300 border border-emerald-600'
+                    }`}>
+                      {log.target}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function LiveCameras() {
   const [selectedCam, setSelectedCam] = useState(CAMERAS[0]);
   const [gridMode, setGridMode] = useState('2x2');
@@ -260,19 +408,17 @@ export default function LiveCameras() {
             <span>AI OVERLAY: {isBoundingBoxEnabled ? 'ENABLED' : 'HIDDEN'}</span>
           </button>
 
-          {isLocalhost && (
-            <button
-              onClick={() => setShowEmbeddedMatrix(!showEmbeddedMatrix)}
-              className={`px-3 py-1.5 rounded-lg border font-mono text-xs flex items-center gap-1.5 transition ${
-                showEmbeddedMatrix 
-                  ? 'bg-cyan-500 text-black font-extrabold shadow-glow-cyan' 
-                  : 'bg-command-card border-cyan-500/50 text-cyan-300 hover:bg-cyan-500/10'
-              }`}
-            >
-              <Activity className="w-3.5 h-3.5" />
-              <span>{showEmbeddedMatrix ? 'SHOW CAMERA GRID' : 'EMBED MATRIX DASHBOARD (PORT 5000)'}</span>
-            </button>
-          )}
+          <button
+            onClick={() => setShowEmbeddedMatrix(!showEmbeddedMatrix)}
+            className={`px-3 py-1.5 rounded-lg border font-mono text-xs flex items-center gap-1.5 transition ${
+              showEmbeddedMatrix 
+                ? 'bg-cyan-500 text-black font-extrabold shadow-glow-cyan' 
+                : 'bg-command-card border-cyan-500/50 text-cyan-300 hover:bg-cyan-500/10'
+            }`}
+          >
+            <Activity className="w-3.5 h-3.5" />
+            <span>{showEmbeddedMatrix ? 'SHOW CAMERA GRID' : 'EMBED MATRIX DASHBOARD'}</span>
+          </button>
         </div>
 
         {/* Right: Python FastAPI Backend Connector / Vercel Banner */}
@@ -320,24 +466,9 @@ export default function LiveCameras() {
         </div>
       )}
 
-      {/* Embedded Full SENTINEL AI Command Center Matrix from Port 5000 */}
+      {/* Embedded Full SENTINEL AI Command Center Matrix */}
       {showEmbeddedMatrix ? (
-        <div className="w-full bg-command-card rounded-xl border border-cyan-500/50 p-2 shadow-2xl">
-          <div className="flex items-center justify-between p-2 bg-black/60 rounded mb-2 font-mono text-xs text-cyan-300">
-            <span className="font-bold flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              SENTINEL AI 2.0 MATRIX — LIVE BACKEND (http://127.0.0.1:5000)
-            </span>
-            <a href="http://127.0.0.1:5000" target="_blank" rel="noreferrer" className="underline text-emerald-400">
-              Open in New Window ↗
-            </a>
-          </div>
-          <iframe 
-            src="http://127.0.0.1:5000" 
-            title="Sentinel AI Backend Command Center"
-            className="w-full h-[850px] rounded-lg border border-command-border"
-          />
-        </div>
+        <EmbeddedMatrixDashboard onBack={() => setShowEmbeddedMatrix(false)} />
       ) : (
         <>
           {/* Main CCTV Grid */}
