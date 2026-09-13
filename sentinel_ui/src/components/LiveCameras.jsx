@@ -87,6 +87,35 @@ const CAMERAS = [
 const isLocalhost = typeof window !== 'undefined' && 
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
+function CameraVideo({ src, className }) {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (el) {
+      el.muted = true;
+      el.defaultMuted = true;
+      el.playsInline = true;
+      const p = el.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {});
+      }
+    }
+  }, [src]);
+
+  return (
+    <video
+      ref={videoRef}
+      autoPlay
+      loop
+      muted
+      playsInline
+      src={src}
+      className={className}
+    />
+  );
+}
+
 export default function LiveCameras() {
   const [selectedCam, setSelectedCam] = useState(CAMERAS[0]);
   const [gridMode, setGridMode] = useState('2x2');
@@ -354,34 +383,43 @@ export default function LiveCameras() {
                             e.target.style.display = 'none';
                           }}
                         />
-                        <video
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
+                        <CameraVideo
                           src={cam.videoUrl}
                           className="absolute inset-0 w-full h-full object-cover z-0"
                         />
                       </>
                     ) : (
-                      <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
+                      <CameraVideo
                         src={cam.videoUrl}
                         className="absolute inset-0 w-full h-full object-cover z-10"
                       />
                     )}
 
                     {/* Simulated Animated Road / Traffic Canvas background fallback */}
-                    <div className="absolute inset-0 opacity-20 pointer-events-none z-0">
-                      {/* Moving Highway Perspective Lines */}
-                      <svg className="w-full h-full text-cyan-500/20" viewBox="0 0 400 225">
-                        <line x1="200" y1="90" x2="40" y2="225" stroke="currentColor" strokeWidth="2" strokeDasharray="8 6" />
-                        <line x1="200" y1="90" x2="360" y2="225" stroke="currentColor" strokeWidth="2" strokeDasharray="8 6" />
-                        <line x1="200" y1="90" x2="200" y2="225" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
-                        <circle cx="200" cy="90" r="18" fill="none" stroke="currentColor" strokeWidth="1" />
+                    <div className="absolute inset-0 opacity-40 pointer-events-none z-0">
+                      {/* Moving Highway Perspective Lines & Animated Traffic */}
+                      <svg className="w-full h-full text-cyan-500/30" viewBox="0 0 400 225" preserveAspectRatio="none">
+                        <defs>
+                          <linearGradient id={`roadGrad_${cam.id}`} x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor="#0f172a" stopOpacity="0.9"/>
+                            <stop offset="100%" stopColor="#0284c7" stopOpacity="0.3"/>
+                          </linearGradient>
+                        </defs>
+                        <polygon points="170,80 230,80 380,225 20,225" fill={`url(#roadGrad_${cam.id})`} />
+                        <line x1="200" y1="80" x2="200" y2="225" stroke="#00f2fe" strokeWidth="2" strokeDasharray="10 8">
+                          <animate attributeName="stroke-dashoffset" from="36" to="0" dur="0.8s" repeatCount="indefinite" />
+                        </line>
+                        <line x1="170" y1="80" x2="20" y2="225" stroke="#3b82f6" strokeWidth="2"/>
+                        <line x1="230" y1="80" x2="380" y2="225" stroke="#3b82f6" strokeWidth="2"/>
+                        {/* Animated Car Headlights moving down the road */}
+                        <circle cx="190" cy="140" r="4" fill="#00f5d4">
+                          <animate attributeName="cy" from="90" to="210" dur="2.5s" repeatCount="indefinite" />
+                          <animate attributeName="cx" from="185" to="110" dur="2.5s" repeatCount="indefinite" />
+                        </circle>
+                        <circle cx="210" cy="140" r="4" fill="#ff2a6d">
+                          <animate attributeName="cy" from="90" to="210" dur="2.1s" repeatCount="indefinite" />
+                          <animate attributeName="cx" from="215" to="290" dur="2.1s" repeatCount="indefinite" />
+                        </circle>
                       </svg>
                     </div>
 
