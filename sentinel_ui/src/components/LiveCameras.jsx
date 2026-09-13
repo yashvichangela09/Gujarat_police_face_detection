@@ -644,56 +644,29 @@ export default function LiveCameras() {
                     </div>
 
                     {/* Dynamic AI Bounding Boxes Overlay */}
-                    {isBoundingBoxEnabled && bboxes
-                      .filter((box) => {
-                        if (overlayFilterMode === 'VEHICLES') return true;
-                        if (overlayFilterMode === 'FACES') return !!box.faceLabel;
-                        return true;
-                      })
-                      .map((box) => (
-                        <div
-                          key={box.id}
-                          className="absolute z-20 border-2 rounded transition-all duration-300 font-mono text-[10px]"
-                          style={{
-                            left: `${box.x}%`,
-                            top: `${box.y}%`,
-                            width: overlayFilterMode === 'FACES' ? `${box.w * 0.65}%` : `${box.w}%`,
-                            height: overlayFilterMode === 'FACES' ? `${box.h * 0.65}%` : `${box.h}%`,
-                            borderColor: overlayFilterMode === 'FACES' 
-                              ? (box.isWanted ? '#ef4444' : '#10b981')
-                              : box.color,
-                            boxShadow: overlayFilterMode === 'FACES'
-                              ? (box.isWanted ? '0 0 14px #ef4444' : '0 0 14px #10b981')
-                              : `0 0 10px ${box.color}88`
-                          }}
-                        >
-                          {/* Face Recognition Badge when in FACES or ALL mode */}
-                          {(overlayFilterMode === 'FACES' || overlayFilterMode === 'ALL') && box.faceLabel && (
-                            <div 
-                              className={`absolute -top-6 left-0 px-2 py-0.5 rounded font-bold whitespace-nowrap flex items-center gap-1 shadow-md text-[9px] ${
-                                box.isWanted ? 'bg-rose-600 text-white animate-pulse' : 'bg-emerald-600 text-white'
-                              }`}
-                            >
-                              <span>{box.faceLabel}</span>
-                            </div>
-                          )}
-
-                          {/* Vehicle Header & ANPR Plate when in VEHICLES or ALL mode */}
-                          {(overlayFilterMode === 'VEHICLES' || overlayFilterMode === 'ALL') && (
-                            <>
-                              <div 
-                                className="absolute -top-5 left-0 px-1.5 py-0.5 rounded text-black font-bold whitespace-nowrap flex items-center gap-1 text-[9px]"
-                                style={{ backgroundColor: box.color }}
-                              >
-                                <span>{box.label}</span>
-                                <span>{(box.conf * 100).toFixed(0)}%</span>
-                              </div>
-                              <div className="absolute -bottom-5 left-0 bg-black/90 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/60 font-bold whitespace-nowrap text-[9px]">
-                                {box.plate} • {box.speed} km/h
-                              </div>
-                            </>
-                          )}
-                        </div>
+                    {isBoundingBoxEnabled && bboxes.map((box) => (
+                      <div
+                        key={box.id}
+                        className="absolute z-20 transition-all duration-300 font-mono text-[10px] pointer-events-none"
+                        style={{
+                          left: `${box.x}%`,
+                          top: `${box.y}%`,
+                        }}
+                      >
+                        {/* Target Face Recognition Badge (WANTED vs CLEAR) */}
+                        {box.faceLabel && (
+                          <div 
+                            className={`px-2.5 py-1 rounded-md font-bold whitespace-nowrap flex items-center gap-1.5 shadow-xl border ${
+                              box.isWanted 
+                                ? 'bg-rose-600/90 text-white border-rose-400 shadow-glow-alert animate-pulse' 
+                                : 'bg-emerald-600/90 text-white border-emerald-400 shadow-glow-emerald'
+                            }`}
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                            <span>{box.faceLabel}</span>
+                          </div>
+                        )}
+                      </div>
                     ))}
 
                     {/* Center Crosshair */}
