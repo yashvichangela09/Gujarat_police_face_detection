@@ -90,7 +90,7 @@ const isLocalhost = typeof window !== 'undefined' &&
 function CameraVideo({ src, className }) {
   const videoRef = useRef(null);
 
-  useEffect(() => {
+  const handlePlay = () => {
     const el = videoRef.current;
     if (el) {
       el.muted = true;
@@ -101,6 +101,10 @@ function CameraVideo({ src, className }) {
         p.catch(() => {});
       }
     }
+  };
+
+  useEffect(() => {
+    handlePlay();
   }, [src]);
 
   return (
@@ -110,6 +114,8 @@ function CameraVideo({ src, className }) {
       loop
       muted
       playsInline
+      onCanPlay={handlePlay}
+      onLoadedData={handlePlay}
       src={src}
       className={className}
     />
@@ -644,30 +650,63 @@ export default function LiveCameras() {
                     </div>
 
                     {/* Dynamic AI Bounding Boxes Overlay */}
-                    {isBoundingBoxEnabled && bboxes.map((box) => (
-                      <div
-                        key={box.id}
-                        className="absolute z-20 transition-all duration-300 font-mono text-[10px] pointer-events-none"
-                        style={{
-                          left: `${box.x}%`,
-                          top: `${box.y}%`,
-                        }}
-                      >
-                        {/* Target Face Recognition Badge (WANTED vs CLEAR) */}
-                        {box.faceLabel && (
-                          <div 
-                            className={`px-2.5 py-1 rounded-md font-bold whitespace-nowrap flex items-center gap-1.5 shadow-xl border ${
-                              box.isWanted 
-                                ? 'bg-rose-600/90 text-white border-rose-400 shadow-glow-alert animate-pulse' 
-                                : 'bg-emerald-600/90 text-white border-emerald-400 shadow-glow-emerald'
-                            }`}
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-                            <span>{box.faceLabel}</span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                    {isBoundingBoxEnabled && bboxes.map((box) => {
+                      const showVehicle = overlayFilterMode === 'ALL' || overlayFilterMode === 'VEHICLES';
+                      const showFace = overlayFilterMode === 'ALL' || overlayFilterMode === 'FACES';
+
+                      if (!showVehicle && !showFace) return null;
+
+                      return (
+                        <div
+                          key={box.id}
+                          className="absolute z-20 transition-all duration-300 font-mono text-[10px] pointer-events-none border-2 rounded-md shadow-lg"
+                          style={{
+                            left: `${box.x}%`,
+                            top: `${box.y}%`,
+                            width: `${box.w}%`,
+                            height: `${box.h}%`,
+                            borderColor: box.color,
+                            backgroundColor: `${box.color}15`,
+                          }}
+                        >
+                          {/* Top Left: Face Recognition Badge (WANTED vs CLEAR) */}
+                          {showFace && box.faceLabel && (
+                            <div 
+                              className={`absolute -top-7 left-0 px-2 py-0.5 rounded text-[9px] font-bold whitespace-nowrap flex items-center gap-1 shadow-md border ${
+                                box.isWanted 
+                                  ? 'bg-rose-600/90 text-white border-rose-400 shadow-glow-alert animate-pulse' 
+                                  : 'bg-emerald-700/90 text-white border-emerald-400 shadow-glow-emerald'
+                              }`}
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                              <span>{box.faceLabel}</span>
+                            </div>
+                          )}
+
+                          {/* Top Right: Vehicle Detection Class + Confidence */}
+                          {showVehicle && (
+                            <div 
+                              className="absolute -top-7 right-0 px-2 py-0.5 rounded text-[9px] font-extrabold whitespace-nowrap bg-black/85 text-cyan-300 border border-cyan-500/50 shadow-md"
+                            >
+                              {box.label} {Math.round(box.conf * 100)}%
+                            </div>
+                          )}
+
+                          {/* Bottom Left: ANPR License Plate & Speed Badge */}
+                          {showVehicle && box.plate && (
+                            <div 
+                              className={`absolute -bottom-6 left-0 px-2 py-0.5 rounded text-[9px] font-bold whitespace-nowrap border shadow-md ${
+                                box.isSpeeding 
+                                  ? 'bg-rose-950/90 text-rose-300 border-rose-500 animate-pulse' 
+                                  : 'bg-black/85 text-amber-300 border-amber-500/50'
+                              }`}
+                            >
+                              🚘 {box.plate} {box.speed && `• ${box.speed} KM/H`}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
 
                     {/* Center Crosshair */}
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-25">
