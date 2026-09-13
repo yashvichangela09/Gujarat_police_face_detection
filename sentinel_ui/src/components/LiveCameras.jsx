@@ -338,23 +338,23 @@ export default function LiveCameras() {
       ];
 
       const basePositions = [
-        { baseX: 10, baseY: 18, w: 24, h: 22 }, // Top-Left Quadrant
-        { baseX: 56, baseY: 18, w: 24, h: 22 }, // Top-Right Quadrant
-        { baseX: 12, baseY: 50, w: 25, h: 22 }, // Bottom-Left Quadrant
-        { baseX: 56, baseY: 50, w: 25, h: 22 }, // Bottom-Right Quadrant
+        { baseX: 6,  baseY: 46, w: 20, h: 20 }, // Road Lane 1 (Left Sedan)
+        { baseX: 30, baseY: 52, w: 18, h: 20 }, // Road Lane 2 (Center Motorcycle)
+        { baseX: 50, baseY: 46, w: 20, h: 20 }, // Road Lane 3 (Center-Right SUV)
+        { baseX: 70, baseY: 50, w: 22, h: 20 }, // Road Lane 4 (Right Bus)
       ];
 
       const newBoxes = Array.from({ length: 4 }).map((_, idx) => {
         const item = vehicleTypes[idx % vehicleTypes.length];
         const pos = basePositions[idx % basePositions.length];
         const time = Date.now() / 1000;
-        const offsetX = Math.sin(time + idx * 1.5) * 4;
-        const offsetY = Math.cos(time * 1.2 + idx) * 3;
+        const offsetX = Math.sin(time + idx * 1.5) * 3;
+        const offsetY = Math.cos(time * 1.2 + idx) * 2;
         const speed = Math.floor(48 + Math.random() * 32);
         return {
           id: idx,
-          x: Math.max(5, Math.min(68, pos.baseX + offsetX)),
-          y: Math.max(16, Math.min(58, pos.baseY + offsetY)),
+          x: Math.max(5, Math.min(72, pos.baseX + offsetX)),
+          y: Math.max(40, Math.min(65, pos.baseY + offsetY)),
           w: pos.w,
           h: pos.h,
           label: item.label,
@@ -684,7 +684,7 @@ export default function LiveCameras() {
                           }}
                         >
                           {/* Top Badge Strip (Flex row containing Vehicle + Face Badges side-by-side with zero overlap) */}
-                          <div className="absolute -top-6 left-0 flex items-center gap-1 z-30 pointer-events-none whitespace-nowrap max-w-[240px]">
+                          <div className="absolute -top-6 left-0 flex items-center gap-1 z-30 pointer-events-none whitespace-nowrap">
                             {showVehicle && (
                               <div className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-black/90 text-cyan-300 border border-cyan-500/60 shadow-md">
                                 {box.label} {Math.round(box.conf * 100)}%
