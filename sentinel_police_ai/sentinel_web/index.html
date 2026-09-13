@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SENTINEL AI | Multi-Camera Command Center</title>
+  <link rel="stylesheet" href="/command_center.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="sentinel-app">
+
+  <!-- ══════════════ TOP COMMAND BAR ══════════════ -->
+  <header class="topbar">
+    <div class="brand-group">
+      <div class="brand-badge">
+        <span class="brand-icon">◈</span>
+        <div class="brand-pulse"></div>
+      </div>
+      <div class="brand-text">
+        <div class="brand-title">SENTINEL <span class="brand-version">AI 2.0</span></div>
+        <div class="brand-subtitle">MULTI-CAMERA VEHICLE INTELLIGENCE · SURVEILLANCE MATRIX</div>
+      </div>
+    </div>
+
+    <div class="system-telemetry">
+      <div class="hud-pill sys-status">
+        <span class="pulsing-dot green"></span>
+        <span id="sysStatusText">SYSTEM ONLINE · 5 CCTV NODES ACTIVE</span>
+      </div>
+      <div class="hud-pill clock-pill">
+        <span class="mono-clock" id="digitalClock">--:--:--</span>
+        <span class="mono-date" id="digitalDate">----/--/--</span>
+      </div>
+      <div class="hud-pill op-pill">
+        <span class="op-tag">AGENT</span>
+        <b class="op-val">COMMANDER</b>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════ TOP 5 KPI SUMMARY METRICS ══════════════ -->
+  <section class="kpi-strip">
+    <!-- 1. Active Cameras -->
+    <div class="kpi-box" id="kpiCard-cameras">
+      <div class="kpi-icon-wrap cyan">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+      </div>
+      <div class="kpi-content">
+        <div class="kpi-value cyan-text" id="kpi-active-cameras">3</div>
+        <div class="kpi-label">ACTIVE CAMERAS</div>
+      </div>
+      <div class="kpi-sparkle"></div>
+    </div>
+
+    <!-- 2. Vehicles Detected -->
+    <div class="kpi-box" id="kpiCard-detected">
+      <div class="kpi-icon-wrap amber">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11.2 2 11.6 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+      </div>
+      <div class="kpi-content">
+        <div class="kpi-value amber-text" id="kpi-vehicles-detected">0</div>
+        <div class="kpi-label">VEHICLES DETECTED</div>
+      </div>
+    </div>
+
+    <!-- 3. Unique Vehicles -->
+    <div class="kpi-box" id="kpiCard-unique">
+      <div class="kpi-icon-wrap emerald">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+      </div>
+      <div class="kpi-content">
+        <div class="kpi-value emerald-text" id="kpi-unique-vehicles">0</div>
+        <div class="kpi-label">UNIQUE VEHICLES</div>
+      </div>
+    </div>
+
+    <!-- 4. Plates Recognized -->
+    <div class="kpi-box" id="kpiCard-plates">
+      <div class="kpi-icon-wrap purple">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M6 10h12"/><path d="M6 14h6"/></svg>
+      </div>
+      <div class="kpi-content">
+        <div class="kpi-value purple-text" id="kpi-plates-recognized">0</div>
+        <div class="kpi-label">PLATES RECOGNIZED</div>
+      </div>
+    </div>
+
+    <!-- 5. Cross-Camera Matches -->
+    <div class="kpi-box" id="kpiCard-matches">
+      <div class="kpi-icon-wrap rose">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </div>
+      <div class="kpi-content">
+        <div class="kpi-value rose-text" id="kpi-cross-matches">0</div>
+        <div class="kpi-label">CROSS-CAM MATCHES</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ 3 LIVE CAMERA SURVEILLANCE GRID ══════════════ -->
+  <section class="camera-surveillance-section">
+    <div class="section-titlebar">
+      <div class="titlebar-left">
+        <span class="hud-marker">///</span>
+        <span class="titlebar-heading">LIVE SURVEILLANCE FEEDS</span>
+        <span class="titlebar-sub">CONCURRENT MULTI-STREAM AI PIPELINE (YOLOv11 + PADDLEOCR + GLOBAL RE-ID)</span>
+      </div>
+      <div class="titlebar-right">
+        <span class="live-tag"><span class="pulsing-dot green"></span> REAL-TIME SYNC</span>
+      </div>
+    </div>
+
+    <div class="camera-grid-5way" id="cameraGrid">
+      <!-- Camera 1 -->
+      <div class="cam-card" id="camCard-CAMERA_01">
+        <div class="cam-card-head">
+          <div class="cam-meta">
+            <span class="cam-badge">CAMERA_01</span>
+            <span class="cam-loc" id="loc-CAMERA_01">North Approach - Signal 1</span>
+          </div>
+          <div class="cam-live-hud">
+            <span class="dot green"></span> LIVE
+          </div>
+        </div>
+        <div class="cam-video-wrap">
+          <img class="cam-mjpeg-stream" src="/api/camera/CAMERA_01/stream" alt="CAMERA_01 Live Feed"
+               onerror="this.onerror=null; this.parentElement.classList.add('feed-error');">
+          <div class="cam-overlay-badge top-left">AI OVERLAY ACTIVE</div>
+          <div class="cam-overlay-badge bottom-left" id="camStats-CAMERA_01">1280x720 · 24 FPS</div>
+        </div>
+        <div class="cam-card-telemetry">
+          <div class="tel-slot"><span>CURRENT VEHICLES</span><b id="telVeh-CAMERA_01" class="cyan-text">0</b></div>
+          <div class="tel-slot"><span>ANPR READS</span><b id="telAnpr-CAMERA_01" class="purple-text">0</b></div>
+          <div class="tel-slot"><span>PEAK CONF</span><b id="telConf-CAMERA_01" class="emerald-text">—</b></div>
+        </div>
+      </div>
+
+      <!-- Camera 2 -->
+      <div class="cam-card" id="camCard-CAMERA_02">
+        <div class="cam-card-head">
+          <div class="cam-meta">
+            <span class="cam-badge">CAMERA_02</span>
+            <span class="cam-loc" id="loc-CAMERA_02">South Approach - Signal 2</span>
+          </div>
+          <div class="cam-live-hud">
+            <span class="dot green"></span> LIVE
+          </div>
+        </div>
+        <div class="cam-video-wrap">
+          <img class="cam-mjpeg-stream" src="/api/camera/CAMERA_02/stream" alt="CAMERA_02 Live Feed"
+               onerror="this.onerror=null; this.parentElement.classList.add('feed-error');">
+          <div class="cam-overlay-badge top-left">AI OVERLAY ACTIVE</div>
+          <div class="cam-overlay-badge bottom-left" id="camStats-CAMERA_02">1280x720 · 24 FPS</div>
+        </div>
+        <div class="cam-card-telemetry">
+          <div class="tel-slot"><span>CURRENT VEHICLES</span><b id="telVeh-CAMERA_02" class="cyan-text">0</b></div>
+          <div class="tel-slot"><span>ANPR READS</span><b id="telAnpr-CAMERA_02" class="purple-text">0</b></div>
+          <div class="tel-slot"><span>PEAK CONF</span><b id="telConf-CAMERA_02" class="emerald-text">—</b></div>
+        </div>
+      </div>
+
+      <!-- Camera 3 -->
+      <div class="cam-card" id="camCard-CAMERA_03">
+        <div class="cam-card-head">
+          <div class="cam-meta">
+            <span class="cam-badge">CAMERA_03</span>
+            <span class="cam-loc" id="loc-CAMERA_03">East Crossroad - Signal 3</span>
+          </div>
+          <div class="cam-live-hud">
+            <span class="dot green"></span> LIVE
+          </div>
+        </div>
+        <div class="cam-video-wrap">
+          <img class="cam-mjpeg-stream" src="/api/camera/CAMERA_03/stream" alt="CAMERA_03 Live Feed"
+               onerror="this.onerror=null; this.parentElement.classList.add('feed-error');">
+          <div class="cam-overlay-badge top-left">AI OVERLAY ACTIVE</div>
+          <div class="cam-overlay-badge bottom-left" id="camStats-CAMERA_03">1280x720 · 24 FPS</div>
+        </div>
+        <div class="cam-card-telemetry">
+          <div class="tel-slot"><span>CURRENT VEHICLES</span><b id="telVeh-CAMERA_03" class="cyan-text">0</b></div>
+          <div class="tel-slot"><span>ANPR READS</span><b id="telAnpr-CAMERA_03" class="purple-text">0</b></div>
+          <div class="tel-slot"><span>PEAK CONF</span><b id="telConf-CAMERA_03" class="emerald-text">—</b></div>
+        </div>
+      </div>
+
+      <!-- Camera 4 -->
+      <div class="cam-card" id="camCard-CAMERA_04">
+        <div class="cam-card-head">
+          <div class="cam-meta">
+            <span class="cam-badge">CAMERA_04</span>
+            <span class="cam-loc" id="loc-CAMERA_04">West Junction - Signal 4</span>
+          </div>
+          <div class="cam-live-hud">
+            <span class="dot green"></span> LIVE
+          </div>
+        </div>
+        <div class="cam-video-wrap">
+          <img class="cam-mjpeg-stream" src="/api/camera/CAMERA_04/stream" alt="CAMERA_04 Live Feed"
+               onerror="this.onerror=null; this.parentElement.classList.add('feed-error');">
+          <div class="cam-overlay-badge top-left">AI OVERLAY ACTIVE</div>
+          <div class="cam-overlay-badge bottom-left" id="camStats-CAMERA_04">1280x720 · 24 FPS</div>
+        </div>
+        <div class="cam-card-telemetry">
+          <div class="tel-slot"><span>CURRENT VEHICLES</span><b id="telVeh-CAMERA_04" class="cyan-text">0</b></div>
+          <div class="tel-slot"><span>ANPR READS</span><b id="telAnpr-CAMERA_04" class="purple-text">0</b></div>
+          <div class="tel-slot"><span>PEAK CONF</span><b id="telConf-CAMERA_04" class="emerald-text">—</b></div>
+        </div>
+      </div>
+
+      <!-- Camera 5 -->
+      <div class="cam-card" id="camCard-CAMERA_05">
+        <div class="cam-card-head">
+          <div class="cam-meta">
+            <span class="cam-badge">CAMERA_05</span>
+            <span class="cam-loc" id="loc-CAMERA_05">Overhead Surveillance - Matrix 5</span>
+          </div>
+          <div class="cam-live-hud">
+            <span class="dot green"></span> LIVE
+          </div>
+        </div>
+        <div class="cam-video-wrap">
+          <img class="cam-mjpeg-stream" src="/api/camera/CAMERA_05/stream" alt="CAMERA_05 Live Feed"
+               onerror="this.onerror=null; this.parentElement.classList.add('feed-error');">
+          <div class="cam-overlay-badge top-left">AI OVERLAY ACTIVE</div>
+          <div class="cam-overlay-badge bottom-left" id="camStats-CAMERA_05">1280x720 · 24 FPS</div>
+        </div>
+        <div class="cam-card-telemetry">
+          <div class="tel-slot"><span>CURRENT VEHICLES</span><b id="telVeh-CAMERA_05" class="cyan-text">0</b></div>
+          <div class="tel-slot"><span>ANPR READS</span><b id="telAnpr-CAMERA_05" class="purple-text">0</b></div>
+          <div class="tel-slot"><span>PEAK CONF</span><b id="telConf-CAMERA_05" class="emerald-text">—</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ SPLIT BOTTOM SECTION: TRANSITIONS & EVENT TABLE ══════════════ -->
+  <section class="intel-split-section">
+    <!-- LEFT: Cross-Camera Re-ID Transitions Feed -->
+    <div class="intel-pane transitions-pane">
+      <div class="pane-header">
+        <div class="pane-title">
+          <span class="pane-icon rose-text">⇄</span>
+          <span>CROSS-CAMERA RE-ID & TRANSITIONS</span>
+        </div>
+        <div class="pane-badge" id="crossEventBadge">0 TRANSITIONS</div>
+      </div>
+      <div class="transitions-feed-container" id="transitionsFeed">
+        <div class="feed-empty-state" id="feedEmptyState">
+          <div class="empty-radar-circle"></div>
+          <div class="empty-label">Awaiting multi-camera transit events...</div>
+          <div class="empty-sub">When vehicles transition between cameras (e.g. CAMERA_01 → CAMERA_02), matching identities appear here in real time.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Real-Time Event Log Table -->
+    <div class="intel-pane table-pane">
+      <div class="pane-header">
+        <div class="pane-title">
+          <span class="pane-icon cyan-text">▤</span>
+          <span>REAL-TIME VEHICLE EVENT LOG</span>
+        </div>
+        <div class="search-input-wrap">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="eventTableSearch" placeholder="Filter plate / ID / type / color / camera..." autocomplete="off">
+        </div>
+      </div>
+
+      <div class="table-scroll-wrap">
+        <table class="sentinel-table" id="detectionTable">
+          <thead>
+            <tr>
+              <th style="width:11%">TIMESTAMP</th>
+              <th style="width:13%">CAMERA</th>
+              <th style="width:14%">LOCAL ID</th>
+              <th style="width:17%">GLOBAL ID</th>
+              <th style="width:11%">TYPE</th>
+              <th style="width:10%">COLOR</th>
+              <th style="width:16%">LICENSE PLATE</th>
+              <th style="width:8%">CONF</th>
+            </tr>
+          </thead>
+          <tbody id="detectionTableBody">
+            <!-- Dynamically populated via Socket.IO -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ VEHICLE IDENTITY DOSSIER MATRIX (IDENTITY CARDS) ══════════════ -->
+  <section class="identity-matrix-section" id="identitySection">
+    <div class="section-titlebar">
+      <div class="titlebar-left">
+        <span class="hud-marker">🪪</span>
+        <span class="titlebar-heading">CENTRAL VEHICLE IDENTITY DOSSIER & REGISTRY</span>
+        <span class="titlebar-sub">GLOBAL VEHICLE IDENTITIES · REAL CROPS · EMBOSSED ANPR BADGES · MULTI-CAMERA TRAJECTORIES</span>
+      </div>
+      <div class="titlebar-right">
+        <span class="id-matrix-badge" id="idRegistryCount">0 IDENTITIES ENROLLED</span>
+      </div>
+    </div>
+
+    <!-- Identity Cards Filter Toolbar -->
+    <div class="id-toolbar">
+      <div class="id-search-wrap">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="idCardSearch" placeholder="Search Identity Cards by Plate, Global ID, Type, Color, Camera..." autocomplete="off">
+      </div>
+      <div class="id-filter-chips">
+        <button class="id-chip active" data-filter="all">ALL PROFILES</button>
+        <button class="id-chip" data-filter="anpr">VERIFIED PLATES</button>
+        <button class="id-chip" data-filter="multicam">MULTI-CAM TRANSITS</button>
+        <button class="id-chip" data-filter="car">CARS</button>
+        <button class="id-chip" data-filter="truck">TRUCKS / BUSES</button>
+        <button class="id-chip" data-filter="bike">MOTORCYCLES</button>
+      </div>
+    </div>
+
+    <!-- Identity Cards Grid Container -->
+    <div class="identity-cards-grid" id="identityCardsGrid">
+      <div class="id-cards-empty">Loading vehicle identity dossier matrix...</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Vehicle Detail Modal -->
+<div class="modal-backdrop" id="vehModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title" id="modalTitle">VEHICLE PROFILE</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- Alert Toasts Container -->
+<div class="toast-stack" id="toastStack"></div>
+
+<script src="/command_center.js"></script>
+</body>
+</html>

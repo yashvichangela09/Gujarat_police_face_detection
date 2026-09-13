@@ -1,0 +1,27 @@
+# Exclude unrelated projects
+Dmart_Project/
+Mobile_Project/
+
+# Node dependencies & builds
+node_modules/
+dist/
+.vite/
+.vercel/
+
+# Python virtual environment & cache
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Output logs & SQLite temporary databases
+*.log
+output/vehicle_crops/
+output/plate_crops/
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

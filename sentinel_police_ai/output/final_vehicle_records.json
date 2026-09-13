@@ -1,0 +1,399 @@
+[
+  {
+    "vehicle_id": "VEH_0001",
+    "tracking_id": "VEH_0001",
+    "vehicle_type": "Car",
+    "color": "Blue",
+    "number_plate": "MH1PS70",
+    "plate_confidence": 75.46,
+    "detection_confidence": 0.0,
+    "cameras_seen": [
+      "CAM-001"
+    ],
+    "cameras_count": 1,
+    "frames_seen": 1,
+    "appearance": {},
+    "first_seen": "2026-09-09T20:33:20",
+    "last_seen": "2026-09-09T20:33:20",
+    "route": [
+      "CAM-001"
+    ],
+    "timeline": [
+      {
+        "vehicle_id": "VEH_0001",
+        "camera_id": "CAM-001",
+        "frame": 50,
+        "time": "2026-09-09T20:33:20"
+      }
+    ],
+    "last_updated": "2026-09-09T20:35:09"
+  },
+  {
+    "vehicle_id": "VEH_0002",
+    "tracking_id": "VEH_0002",
+    "vehicle_type": "Car",
+    "color": "White",
+    "number_plate": "MH03EG8494",
+    "plate_confidence": 98.11,
+    "detection_confidence": 0.0,
+    "cameras_seen": [
+      "CAM-001"
+    ],
+    "cameras_count": 1,
+    "frames_seen": 3,
+    "appearance": {},
+    "first_seen": "2026-09-09T20:33:26",
+    "last_seen": "2026-09-09T20:34:44",
+    "route": [
+      "CAM-001"
+    ],
+    "timeline": [
+      {
+        "vehicle_id": "VEH_0002",
+        "camera_id": "CAM-001",
+        "frame": 50,
+        "time": "2026-09-09T20:33:26"
+      },
+      {
+        "vehicle_id": "VEH_0002",
+        "camera_id": "CAM-001",
+        "frame": 100,
+        "time": "2026-09-09T20:33:59"
+      },
+      {
+        "vehicle_id": "VEH_0002",
+        "camera_id": "CAM-001",
+        "frame": 150,
+        "time": "2026-09-09T20:34:44"
+      }
+    ],
+    "last_updated": "2026-09-09T20:35:09"
+  },
+  {
+    "vehicle_id": "VEH_0003",
+    "tracking_id": "VEH_0003",
+    "vehicle_type": "Truck",
+    "color": "Blue",
+    "number_plate": "C",
+    "plate_confidence": 70.84,
+    "detection_confidence": 0.0,
+    "cameras_seen": [
+      "CAM-001"
+    ],
+    "cameras_count": 1,
+    "frames_seen": 3,
+    "appearance": {},
+    "first_seen": "2026-09-09T20:33:32",
+    "last_seen": "2026-09-09T20:35:08",
+    "route": [
+      "CAM-001"
+    ],
+    "timeline": [
+      {
+        "vehicle_id": "VEH_0003",
+        "camera_id": "CAM-001",
+        "frame": 50,
+        "time": "2026-09-09T20:33:32"
+      },
+      {
+        "vehicle_id": "VEH_0003",
+        "camera_id": "CAM-001",
+        "frame": 100,
+        "time": "2026-09-09T20:34:00"
+      },
+      {
+        "vehicle_id": "VEH_0003",
+        "camera_id": "CAM-001",
+        "frame": 150,
+        "time": "2026-09-09T20:35:08"
+      }
+    ],
+    "last_updated": "2026-09-09T20:35:09"
+  },
+  {
+    "vehicle_id": "VEH_0004",
+    "tracking_id": "VEH_0004",
+    "vehicle_type": "Motorcycle",
+    "color": "Grey",
+    "number_plate": "UNKNOWN",
+    "plate_confidence": 0.0,
+    "detection_confidence": 0.0,
+    "cameras_seen": [
+      "CAM-001"
+    ],
+    "cameras_count": 1,
+    "frames_seen": 8,
+    "appearance": {},
+    "first_seen": "2026-09-09T20:33:32",
+    "last_seen": "2026-09-09T20:34:44",
+    "route": [
+      "CAM-001"
+    ],
+    "timeline": [
+      {
+        "vehicle_id": "VEH_0004",
+        "camera_id": "CAM-001",
+        "frame": 50,
+        "time": "2026-09-09T20:33:32"
+      },
+      {
+        "vehicle_id": "VEH_0004",
+        "camera_id": "CAM-001",
+        "frame": 100,
+        "time": "2026-09-09T20:34:00"
+      },
+      {
+        "vehicle_id": "VEH_0004",
+        "camera_id": "CAM-001",
+        "frame": 100,
+        "time": "2026-09-09T20:34:00"
+      },
+      {
+        "vehicle_id": "VEH_0004",
+        "camera_id": "CAM-001",
+        "frame": 100,
+        "time": "2026-09-09T20:34:00"
+      },
+      {
+        "vehicle_id": "VEH_0004",
+        "camera_id": "CAM-001",
+        "frame": 100,
+        "time": "2026-09-09T20:34:06"
+      },
+      {
+        "vehicle_id": "VEH_0004",
+        "camera_id": "CAM-001",
+        "frame": 100,
+        "time": "2026-09-09T20:34:15"
+      },
+      {
+        "vehicle_id": "VEH_0004",
+        "camera_id": "CAM-001",
+        "frame": 150,
+        "time": "2026-09-09T20:34:38"
+      },
+      {
+        "vehicle_id": "VEH_0004",
+        "camera_id": "CAM-001",
+        "frame": 150,
+        "time": "2026-09-09T20:34:44"
+      }
+    ],
+    "last_updated": "2026-09-09T20:35:09"
+  },
+  {
+    "vehicle_id": "VEH_0005",
+    "tracking_id": "VEH_0005",
+    "vehicle_type": "Auto Rickshaw",
+    "color": "White",
+    "number_plate": "UNKNOWN",
+    "plate_confidence": 0.0,
+    "detection_confidence": 0.0,
+    "cameras_seen": [
+      "CAM-001"
+    ],
+    "cameras_count": 1,
+    "frames_seen": 1,
+    "appearance": {},
+    "first_seen": "2026-09-09T20:33:32",
+    "last_seen": "2026-09-09T20:33:32",
+    "route": [
+      "CAM-001"
+    ],
+    "timeline": [
+      {
+        "vehicle_id": "VEH_0005",
+        "camera_id": "CAM-001",
+        "frame": 50,
+        "time": "2026-09-09T20:33:32"
+      }
+    ],
+    "last_updated": "2026-09-09T20:35:09"
+  },
+  {
+    "vehicle_id": "VEH_0006",
+    "tracking_id": "VEH_0006",
+    "vehicle_type": "Truck",
+    "color": "Red",
+    "number_plate": "GOODSRMIGR",
+    "plate_confidence": 94.28,
+    "detection_confidence": 0.0,
+    "cameras_seen": [
+      "CAM-001"
+    ],
+    "cameras_count": 1,
+    "frames_seen": 3,
+    "appearance": {},
+    "first_seen": "2026-09-09T20:33:47",
+    "last_seen": "2026-09-09T20:34:54",
+    "route": [
+      "CAM-001"
+    ],
+    "timeline": [
+      {
+        "vehicle_id": "VEH_0006",
+        "camera_id": "CAM-001",
+        "frame": 50,
+        "time": "2026-09-09T20:33:47"
+      },
+      {
+        "vehicle_id": "VEH_0006",
+        "camera_id": "CAM-001",
+        "frame": 100,
+        "time": "2026-09-09T20:34:15"
+      },
+      {
+        "vehicle_id": "VEH_0006",
+        "camera_id": "CAM-001",
+        "frame": 150,
+        "time": "2026-09-09T20:34:54"
+      }
+    ],
+    "last_updated": "2026-09-09T20:35:09"
+  },
+  {
+    "vehicle_id": "VEH_0007",
+    "tracking_id": "VEH_0007",
+    "vehicle_type": "Car",
+    "color": "Black",
+    "number_plate": "UNKNOWN",
+    "plate_confidence": 0.0,
+    "detection_confidence": 0.0,
+    "cameras_seen": [
+      "CAM-001"
+    ],
+    "cameras_count": 1,
+    "frames_seen": 1,
+    "appearance": {},
+    "first_seen": "2026-09-09T20:34:00",
+    "last_seen": "2026-09-09T20:34:00",
+    "route": [
+      "CAM-001"
+    ],
+    "timeline": [
+      {
+        "vehicle_id": "VEH_0007",
+        "camera_id": "CAM-001",
+        "frame": 100,
+        "time": "2026-09-09T20:34:00"
+      }
+    ],
+    "last_updated": "2026-09-09T20:35:09"
+  },
+  {
+    "vehicle_id": "VEH_0008",
+    "tracking_id": "VEH_0008",
+    "vehicle_type": "Car",
+    "color": "Black",
+    "number_plate": "MH01BD476A",
+    "plate_confidence": 87.1,
+    "detection_confidence": 0.0,
+    "cameras_seen": [
+      "CAM-001"
+    ],
+    "cameras_count": 1,
+    "frames_seen": 1,
+    "appearance": {},
+    "first_seen": "2026-09-09T20:34:27",
+    "last_seen": "2026-09-09T20:34:27",
+    "route": [
+      "CAM-001"
+    ],
+    "timeline": [
+      {
+        "vehicle_id": "VEH_0008",
+        "camera_id": "CAM-001",
+        "frame": 150,
+        "time": "2026-09-09T20:34:27"
+      }
+    ],
+    "last_updated": "2026-09-09T20:35:09"
+  },
+  {
+    "vehicle_id": "VEH_0009",
+    "tracking_id": "VEH_0009",
+    "vehicle_type": "Auto Rickshaw",
+    "color": "Black",
+    "number_plate": "1",
+    "plate_confidence": 88.74,
+    "detection_confidence": 0.0,
+    "cameras_seen": [
+      "CAM-001"
+    ],
+    "cameras_count": 1,
+    "frames_seen": 1,
+    "appearance": {},
+    "first_seen": "2026-09-09T20:34:37",
+    "last_seen": "2026-09-09T20:34:37",
+    "route": [
+      "CAM-001"
+    ],
+    "timeline": [
+      {
+        "vehicle_id": "VEH_0009",
+        "camera_id": "CAM-001",
+        "frame": 150,
+        "time": "2026-09-09T20:34:37"
+      }
+    ],
+    "last_updated": "2026-09-09T20:35:09"
+  },
+  {
+    "vehicle_id": "VEH_0010",
+    "tracking_id": "VEH_0010",
+    "vehicle_type": "Car",
+    "color": "Red",
+    "number_plate": "493EZA0H8",
+    "plate_confidence": 75.51,
+    "detection_confidence": 0.0,
+    "cameras_seen": [
+      "CAM-001"
+    ],
+    "cameras_count": 1,
+    "frames_seen": 1,
+    "appearance": {},
+    "first_seen": "2026-09-09T20:34:44",
+    "last_seen": "2026-09-09T20:34:44",
+    "route": [
+      "CAM-001"
+    ],
+    "timeline": [
+      {
+        "vehicle_id": "VEH_0010",
+        "camera_id": "CAM-001",
+        "frame": 150,
+        "time": "2026-09-09T20:34:44"
+      }
+    ],
+    "last_updated": "2026-09-09T20:35:09"
+  },
+  {
+    "vehicle_id": "VEH_0011",
+    "tracking_id": "VEH_0011",
+    "vehicle_type": "Motorcycle",
+    "color": "Black",
+    "number_plate": "UNKNOWN",
+    "plate_confidence": 0.0,
+    "detection_confidence": 0.0,
+    "cameras_seen": [
+      "CAM-001"
+    ],
+    "cameras_count": 1,
+    "frames_seen": 1,
+    "appearance": {},
+    "first_seen": "2026-09-09T20:34:44",
+    "last_seen": "2026-09-09T20:34:44",
+    "route": [
+      "CAM-001"
+    ],
+    "timeline": [
+      {
+        "vehicle_id": "VEH_0011",
+        "camera_id": "CAM-001",
+        "frame": 150,
+        "time": "2026-09-09T20:34:44"
+      }
+    ],
+    "last_updated": "2026-09-09T20:35:09"
+  }
+]

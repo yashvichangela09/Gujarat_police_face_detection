@@ -1,0 +1,29 @@
+{
+  "cameras": [
+    {
+      "id": "CAMERA_01",
+      "location": "North Approach - Signal 1",
+      "source": "dummy_videos/india_traffic.mp4"
+    },
+    {
+      "id": "CAMERA_02",
+      "location": "South Approach - Signal 2",
+      "source": "dummy_videos/india_traffic.mp4"
+    },
+    {
+      "id": "CAMERA_03",
+      "location": "East Crossroad - Signal 3",
+      "source": "dummy_videos/india_traffic.mp4"
+    },
+    {
+      "id": "CAMERA_04",
+      "location": "West Junction - Signal 4",
+      "source": "dummy_videos/india_traffic.mp4"
+    },
+    {
+      "id": "CAMERA_05",
+      "location": "Overhead Surveillance - Matrix 5",
+      "source": "dummy_videos/india_traffic.mp4"
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+@import 'leaflet/dist/leaflet.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #030712;
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+/* Custom Cyber & Tactical HUD Styling */
+.cyber-grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(0, 242, 254, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.tactical-hex-bg {
+  background-image: radial-gradient(rgba(0, 245, 212, 0.08) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Tactical Corner Brackets (⌜ ⌝ ⌞ ⌟) */
+.hud-corner-box {
+  position: relative;
+}
+
+.hud-corner-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #00f2fe;
+  border-left: 2px solid #00f2fe;
+  pointer-events: none;
+}
+
+.hud-corner-box::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid #00f2fe;
+  border-right: 2px solid #00f2fe;
+  pointer-events: none;
+}
+
+/* Angled Tactical Cut-Corners */
+.tactical-clip {
+  clip-path: polygon(
+    0 8px,
+    8px 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0 calc(100% - 8px)
+  );
+}
+
+.scanline-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0, 242, 254, 0.03) 50%,
+    rgba(0, 242, 254, 0.03)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+/* Glassmorphism Tactical Cards */
+.command-card {
+  background: rgba(8, 14, 28, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(26, 42, 74, 0.8);
+}
+
+.command-card-hover {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.command-card-hover:hover {
+  border-color: rgba(0, 242, 254, 0.6);
+  box-shadow: 0 0 25px rgba(0, 242, 254, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Radar Sweep Animation */
+@keyframes radar-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-radar {
+  animation: radar-sweep 4s linear infinite;
+  transform-origin: center center;
+}
+
+/* Leaflet Dark Customization */
+.leaflet-container {
+  background: #030712 !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.map-cyber-tiles {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+.leaflet-popup-content-wrapper {
+  background: #0d1322 !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #00f2fe !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.3) !important;
+}
+
+.leaflet-popup-tip {
+  background: #0d1322 !important;
+  border: 1px solid #00f2fe !important;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #030712;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a2744;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00f2fe;
+}
