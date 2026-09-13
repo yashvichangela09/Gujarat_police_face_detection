@@ -260,17 +260,19 @@ export default function LiveCameras() {
             <span>AI OVERLAY: {isBoundingBoxEnabled ? 'ENABLED' : 'HIDDEN'}</span>
           </button>
 
-          <button
-            onClick={() => setShowEmbeddedMatrix(!showEmbeddedMatrix)}
-            className={`px-3 py-1.5 rounded-lg border font-mono text-xs flex items-center gap-1.5 transition ${
-              showEmbeddedMatrix 
-                ? 'bg-cyan-500 text-black font-extrabold shadow-glow-cyan' 
-                : 'bg-command-card border-cyan-500/50 text-cyan-300 hover:bg-cyan-500/10'
-            }`}
-          >
-            <Activity className="w-3.5 h-3.5" />
-            <span>{showEmbeddedMatrix ? 'SHOW CAMERA GRID' : 'EMBED MATRIX DASHBOARD (PORT 5000)'}</span>
-          </button>
+          {isLocalhost && (
+            <button
+              onClick={() => setShowEmbeddedMatrix(!showEmbeddedMatrix)}
+              className={`px-3 py-1.5 rounded-lg border font-mono text-xs flex items-center gap-1.5 transition ${
+                showEmbeddedMatrix 
+                  ? 'bg-cyan-500 text-black font-extrabold shadow-glow-cyan' 
+                  : 'bg-command-card border-cyan-500/50 text-cyan-300 hover:bg-cyan-500/10'
+              }`}
+            >
+              <Activity className="w-3.5 h-3.5" />
+              <span>{showEmbeddedMatrix ? 'SHOW CAMERA GRID' : 'EMBED MATRIX DASHBOARD (PORT 5000)'}</span>
+            </button>
+          )}
         </div>
 
         {/* Right: Python FastAPI Backend Connector / Vercel Banner */}
