@@ -10,7 +10,7 @@ const CAMERAS = [
   {
     id: 'CAM-001',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_01/stream',
-    videoUrl: '/videos/traffic_demo.mp4',
+    videoUrl: '/videos/traffic_demo.mp4?v=cam1',
     name: 'SG Highway - Iskcon Crossroad',
     city: 'Ahmedabad',
     status: 'ONLINE',
@@ -25,7 +25,7 @@ const CAMERAS = [
   {
     id: 'CAM-002',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_02/stream',
-    videoUrl: '/videos/traffic_demo.mp4',
+    videoUrl: '/videos/traffic_demo.mp4?v=cam2',
     name: 'Sabarmati Riverfront East',
     city: 'Ahmedabad',
     status: 'ONLINE',
@@ -40,7 +40,7 @@ const CAMERAS = [
   {
     id: 'CAM-003',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_03/stream',
-    videoUrl: '/videos/traffic_demo.mp4',
+    videoUrl: '/videos/traffic_demo.mp4?v=cam3',
     name: 'Surat Textile Market Circle',
     city: 'Surat',
     status: 'ONLINE',
@@ -55,7 +55,7 @@ const CAMERAS = [
   {
     id: 'CAM-004',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_04/stream',
-    videoUrl: '/videos/traffic_demo.mp4',
+    videoUrl: '/videos/traffic_demo.mp4?v=cam4',
     name: 'Ahmedabad-Vadodara Express Toll',
     city: 'Vadodara Toll',
     status: 'ONLINE',
@@ -70,7 +70,7 @@ const CAMERAS = [
   {
     id: 'CAM-005',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_05/stream',
-    videoUrl: '/videos/traffic_demo.mp4',
+    videoUrl: '/videos/traffic_demo.mp4?v=cam5',
     name: 'Overhead Surveillance Matrix',
     city: 'Gandhinagar',
     status: 'ONLINE',
@@ -98,7 +98,11 @@ function CameraVideo({ src, className }) {
       el.playsInline = true;
       const p = el.play();
       if (p && typeof p.catch === 'function') {
-        p.catch(() => {});
+        p.catch(() => {
+          setTimeout(() => {
+            if (el) el.play().catch(() => {});
+          }, 300);
+        });
       }
     }
   };
@@ -116,6 +120,8 @@ function CameraVideo({ src, className }) {
       playsInline
       onCanPlay={handlePlay}
       onLoadedData={handlePlay}
+      onStalled={handlePlay}
+      onWaiting={handlePlay}
       src={src}
       className={className}
     />
@@ -331,18 +337,26 @@ export default function LiveCameras() {
         { label: 'CAR (Sedan)', conf: 0.92, color: '#ff2a6d', plate: 'GJ-06-ZZ-9900', faceLabel: '🚨 WANTED: Ajay Devgan', isWanted: true },
       ];
 
+      const basePositions = [
+        { baseX: 10, baseY: 18, w: 24, h: 22 }, // Top-Left Quadrant
+        { baseX: 56, baseY: 18, w: 24, h: 22 }, // Top-Right Quadrant
+        { baseX: 12, baseY: 50, w: 25, h: 22 }, // Bottom-Left Quadrant
+        { baseX: 56, baseY: 50, w: 25, h: 22 }, // Bottom-Right Quadrant
+      ];
+
       const newBoxes = Array.from({ length: 4 }).map((_, idx) => {
         const item = vehicleTypes[idx % vehicleTypes.length];
+        const pos = basePositions[idx % basePositions.length];
         const time = Date.now() / 1000;
-        const x = 12 + (idx * 22) + Math.sin(time + idx * 1.5) * 6;
-        const y = 25 + (idx * 14) + Math.cos(time * 1.2 + idx) * 5;
+        const offsetX = Math.sin(time + idx * 1.5) * 4;
+        const offsetY = Math.cos(time * 1.2 + idx) * 3;
         const speed = Math.floor(48 + Math.random() * 32);
         return {
           id: idx,
-          x: Math.max(8, Math.min(75, x)),
-          y: Math.max(18, Math.min(62, y)),
-          w: 16 + (idx % 2) * 4,
-          h: 20 + (idx % 2) * 3,
+          x: Math.max(5, Math.min(68, pos.baseX + offsetX)),
+          y: Math.max(16, Math.min(58, pos.baseY + offsetY)),
+          w: pos.w,
+          h: pos.h,
           label: item.label,
           conf: (item.conf + Math.random() * 0.03 - 0.015).toFixed(2),
           color: item.isWanted ? '#ff2a6d' : (speed > selectedCam.speedLimit ? '#ff2a6d' : item.color),
@@ -604,7 +618,7 @@ export default function LiveCameras() {
                     )}
 
                     {/* Simulated Animated Road / Traffic Canvas background fallback */}
-                    <div className="absolute inset-0 opacity-40 pointer-events-none z-0">
+                    <div className="absolute inset-0 opacity-75 pointer-events-none z-0">
                       {/* Moving Highway Perspective Lines & Animated Traffic */}
                       <svg className="w-full h-full text-cyan-500/30" viewBox="0 0 400 225" preserveAspectRatio="none">
                         <defs>
@@ -669,39 +683,37 @@ export default function LiveCameras() {
                             backgroundColor: `${box.color}15`,
                           }}
                         >
-                          {/* Top Left: Face Recognition Badge (WANTED vs CLEAR) */}
-                          {showFace && box.faceLabel && (
-                            <div 
-                              className={`absolute -top-7 left-0 px-2 py-0.5 rounded text-[9px] font-bold whitespace-nowrap flex items-center gap-1 shadow-md border ${
-                                box.isWanted 
-                                  ? 'bg-rose-600/90 text-white border-rose-400 shadow-glow-alert animate-pulse' 
-                                  : 'bg-emerald-700/90 text-white border-emerald-400 shadow-glow-emerald'
-                              }`}
-                            >
-                              <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-                              <span>{box.faceLabel}</span>
-                            </div>
-                          )}
+                          {/* Top Badge Strip (Flex row containing Vehicle + Face Badges side-by-side with zero overlap) */}
+                          <div className="absolute -top-6 left-0 flex items-center gap-1 z-30 pointer-events-none whitespace-nowrap max-w-[240px]">
+                            {showVehicle && (
+                              <div className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-black/90 text-cyan-300 border border-cyan-500/60 shadow-md">
+                                {box.label} {Math.round(box.conf * 100)}%
+                              </div>
+                            )}
+                            {showFace && box.faceLabel && (
+                              <div 
+                                className={`px-1.5 py-0.5 rounded text-[9px] font-bold flex items-center gap-1 shadow-md border ${
+                                  box.isWanted 
+                                    ? 'bg-rose-600/95 text-white border-rose-400 animate-pulse' 
+                                    : 'bg-emerald-700/95 text-white border-emerald-400'
+                                }`}
+                              >
+                                <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                                <span>{box.faceLabel}</span>
+                              </div>
+                            )}
+                          </div>
 
-                          {/* Top Right: Vehicle Detection Class + Confidence */}
-                          {showVehicle && (
-                            <div 
-                              className="absolute -top-7 right-0 px-2 py-0.5 rounded text-[9px] font-extrabold whitespace-nowrap bg-black/85 text-cyan-300 border border-cyan-500/50 shadow-md"
-                            >
-                              {box.label} {Math.round(box.conf * 100)}%
-                            </div>
-                          )}
-
-                          {/* Bottom Left: ANPR License Plate & Speed Badge */}
+                          {/* Bottom ANPR License Plate & Speed Badge (Positioned INSIDE bottom-left of Box for Zero Outer Collision) */}
                           {showVehicle && box.plate && (
                             <div 
-                              className={`absolute -bottom-6 left-0 px-2 py-0.5 rounded text-[9px] font-bold whitespace-nowrap border shadow-md ${
+                              className={`absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap border shadow-md z-30 ${
                                 box.isSpeeding 
-                                  ? 'bg-rose-950/90 text-rose-300 border-rose-500 animate-pulse' 
-                                  : 'bg-black/85 text-amber-300 border-amber-500/50'
+                                  ? 'bg-rose-950/95 text-rose-300 border-rose-500 animate-pulse' 
+                                  : 'bg-black/90 text-amber-300 border-amber-500/60'
                               }`}
                             >
-                              🚘 {box.plate} {box.speed && `• ${box.speed} KM/H`}
+                              🚘 {box.plate} {box.speed ? `• ${box.speed} KM/H` : ''}
                             </div>
                           )}
                         </div>
