@@ -10,6 +10,7 @@ const CAMERAS = [
   {
     id: 'CAM-001',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_01/stream',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     name: 'SG Highway - Iskcon Crossroad',
     city: 'Ahmedabad',
     status: 'ONLINE',
@@ -24,6 +25,7 @@ const CAMERAS = [
   {
     id: 'CAM-002',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_02/stream',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
     name: 'Sabarmati Riverfront East',
     city: 'Ahmedabad',
     status: 'ONLINE',
@@ -38,6 +40,7 @@ const CAMERAS = [
   {
     id: 'CAM-003',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_03/stream',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
     name: 'Surat Textile Market Circle',
     city: 'Surat',
     status: 'ONLINE',
@@ -52,6 +55,7 @@ const CAMERAS = [
   {
     id: 'CAM-004',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_04/stream',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
     name: 'Ahmedabad-Vadodara Express Toll',
     city: 'Vadodara Toll',
     status: 'ONLINE',
@@ -66,6 +70,7 @@ const CAMERAS = [
   {
     id: 'CAM-005',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_05/stream',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
     name: 'Overhead Surveillance Matrix',
     city: 'Gandhinagar',
     status: 'ONLINE',
@@ -331,10 +336,18 @@ export default function LiveCameras() {
                     <img 
                       src={cam.streamUrl} 
                       alt={cam.name} 
-                      className="absolute inset-0 w-full h-full object-cover z-0"
+                      className="absolute inset-0 w-full h-full object-cover z-10"
                       onError={(e) => {
                         e.target.style.display = 'none';
                       }}
+                    />
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      src={cam.videoUrl}
+                      className="absolute inset-0 w-full h-full object-cover z-0"
                     />
 
                     {/* Simulated Animated Road / Traffic Canvas background fallback */}

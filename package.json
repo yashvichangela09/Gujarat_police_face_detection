@@ -1,0 +1,10 @@
+{
+  "name": "gujarat-police-face-detection",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd sentinel_ui && npm run dev",
+    "build": "cd sentinel_ui && npm install && npm run build",
+    "preview": "cd sentinel_ui && npm run preview"
+  }
+}

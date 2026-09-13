@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd sentinel_ui && npm install && npm run build",
+  "outputDirectory": "sentinel_ui/dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
