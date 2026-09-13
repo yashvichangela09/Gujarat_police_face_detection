@@ -84,6 +84,9 @@ const CAMERAS = [
   }
 ];
 
+const isLocalhost = typeof window !== 'undefined' && 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
 export default function LiveCameras() {
   const [selectedCam, setSelectedCam] = useState(CAMERAS[0]);
   const [gridMode, setGridMode] = useState('2x2');
@@ -104,11 +107,11 @@ export default function LiveCameras() {
     // Generate realistic moving AI bounding boxes
     const interval = setInterval(() => {
       const vehicleTypes = [
-        { label: 'CAR (Sedan)', conf: 0.96, color: '#00f2fe', plate: 'GJ-01-AB-1234' },
-        { label: 'MOTORCYCLE', conf: 0.88, color: '#00f5d4', plate: 'GJ-01-XY-5678' },
-        { label: 'TRUCK (Heavy)', conf: 0.93, color: '#ffb703', plate: 'GJ-06-ZZ-9900' },
-        { label: 'BUS (GSRTC)', conf: 0.95, color: '#9d4edd', plate: 'GJ-18-Z-4411' },
-        { label: 'CAR (SUV)', conf: 0.91, color: '#00f2fe', plate: 'GJ-05-CD-3321' },
+        { label: 'CAR (Sedan)', conf: 0.96, color: '#00f2fe', plate: 'GJ-01-AB-1234', faceLabel: 'CITIZEN: CLEAR', isWanted: false },
+        { label: 'MOTORCYCLE', conf: 0.88, color: '#00f5d4', plate: 'GJ-01-XY-5678', faceLabel: 'CITIZEN: CLEAR', isWanted: false },
+        { label: 'CAR (SUV)', conf: 0.94, color: '#ff2a6d', plate: 'GJ-05-CD-3321', faceLabel: '🚨 WANTED: Shahrukh Khan', isWanted: true },
+        { label: 'BUS (GSRTC)', conf: 0.95, color: '#9d4edd', plate: 'GJ-18-Z-4411', faceLabel: 'CITIZEN: CLEAR', isWanted: false },
+        { label: 'CAR (Sedan)', conf: 0.92, color: '#ff2a6d', plate: 'GJ-06-ZZ-9900', faceLabel: '🚨 WANTED: Ajay Devgan', isWanted: true },
       ];
 
       const newBoxes = Array.from({ length: 4 }).map((_, idx) => {
@@ -125,10 +128,12 @@ export default function LiveCameras() {
           h: 20 + (idx % 2) * 3,
           label: item.label,
           conf: (item.conf + Math.random() * 0.03 - 0.015).toFixed(2),
-          color: speed > selectedCam.speedLimit ? '#ff2a6d' : item.color,
+          color: item.isWanted ? '#ff2a6d' : (speed > selectedCam.speedLimit ? '#ff2a6d' : item.color),
           plate: item.plate,
           speed,
           isSpeeding: speed > selectedCam.speedLimit,
+          faceLabel: item.faceLabel,
+          isWanted: item.isWanted,
         };
       });
       setBboxes(newBoxes);
@@ -239,8 +244,14 @@ export default function LiveCameras() {
           </button>
         </div>
 
-        {/* Right: Python FastAPI Backend Connector */}
+        {/* Right: Python FastAPI Backend Connector / Vercel Banner */}
         <div className="flex items-center gap-3 font-mono text-xs">
+          {!isLocalhost && (
+            <span className="text-emerald-300 bg-emerald-950/90 border border-emerald-500/60 px-3 py-1 rounded text-[11px] font-bold font-mono animate-pulse">
+              ● VERCEL DEMO STREAMING (AI ACTIVE)
+            </span>
+          )}
+
           {aiServiceStatus && (
             <span className="text-cyan-300 bg-cyan-950/80 border border-cyan-500/50 px-3 py-1 rounded text-[11px] font-bold">
               {aiServiceStatus}
@@ -332,23 +343,36 @@ export default function LiveCameras() {
                       transition: 'transform 0.2s ease-out'
                     }}
                   >
-                    {/* Live 30 FPS MJPEG AI Video Stream from Port 5000 Backend */}
-                    <img 
-                      src={cam.streamUrl} 
-                      alt={cam.name} 
-                      className="absolute inset-0 w-full h-full object-cover z-10"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                      }}
-                    />
-                    <video
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      src={cam.videoUrl}
-                      className="absolute inset-0 w-full h-full object-cover z-0"
-                    />
+                    {/* Live Stream / Fallback Video Stream */}
+                    {isLocalhost ? (
+                      <>
+                        <img 
+                          src={cam.streamUrl} 
+                          alt={cam.name} 
+                          className="absolute inset-0 w-full h-full object-cover z-10"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                        <video
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          src={cam.videoUrl}
+                          className="absolute inset-0 w-full h-full object-cover z-0"
+                        />
+                      </>
+                    ) : (
+                      <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        src={cam.videoUrl}
+                        className="absolute inset-0 w-full h-full object-cover z-10"
+                      />
+                    )}
 
                     {/* Simulated Animated Road / Traffic Canvas background fallback */}
                     <div className="absolute inset-0 opacity-20 pointer-events-none z-0">
@@ -380,7 +404,7 @@ export default function LiveCameras() {
                     </div>
 
                     {/* Dynamic AI Bounding Boxes Overlay */}
-                    {isBoundingBoxEnabled && isSelected && bboxes.map((box) => (
+                    {isBoundingBoxEnabled && bboxes.map((box) => (
                       <div
                         key={box.id}
                         className="absolute z-20 border-2 rounded transition-all duration-300 font-mono text-[10px]"
@@ -402,13 +426,24 @@ export default function LiveCameras() {
                           <span>{(box.conf * 100).toFixed(0)}%</span>
                         </div>
 
+                        {/* Face Recognition Badge */}
+                        {box.faceLabel && (
+                          <div 
+                            className={`absolute -top-10 left-0 px-1.5 py-0.5 rounded font-bold whitespace-nowrap flex items-center gap-1 shadow-md ${
+                              box.isWanted ? 'bg-rose-600 text-white animate-pulse' : 'bg-emerald-600 text-white'
+                            }`}
+                          >
+                            <span>{box.faceLabel}</span>
+                          </div>
+                        )}
+
                         {/* ANPR Plate Badge */}
                         <div className="absolute -bottom-5 left-0 bg-black/90 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/60 font-bold whitespace-nowrap">
                           {box.plate} • {box.speed} km/h
                         </div>
 
                         {box.isSpeeding && (
-                          <div className="absolute -top-10 left-0 bg-rose-600 text-white font-extrabold px-1.5 py-0.5 rounded animate-bounce shadow-glow-alert">
+                          <div className="absolute -top-14 left-0 bg-rose-600 text-white font-extrabold px-1.5 py-0.5 rounded animate-bounce shadow-glow-alert">
                             ⚠️ OVERSPEED VIOLATION
                           </div>
                         )}
