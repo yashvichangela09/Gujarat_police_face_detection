@@ -10,7 +10,7 @@ const CAMERAS = [
   {
     id: 'CAM-001',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_01/stream',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    videoUrl: '/videos/traffic_demo.mp4',
     name: 'SG Highway - Iskcon Crossroad',
     city: 'Ahmedabad',
     status: 'ONLINE',
@@ -25,7 +25,7 @@ const CAMERAS = [
   {
     id: 'CAM-002',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_02/stream',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    videoUrl: '/videos/traffic_demo.mp4',
     name: 'Sabarmati Riverfront East',
     city: 'Ahmedabad',
     status: 'ONLINE',
@@ -40,7 +40,7 @@ const CAMERAS = [
   {
     id: 'CAM-003',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_03/stream',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    videoUrl: '/videos/traffic_demo.mp4',
     name: 'Surat Textile Market Circle',
     city: 'Surat',
     status: 'ONLINE',
@@ -55,7 +55,7 @@ const CAMERAS = [
   {
     id: 'CAM-004',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_04/stream',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+    videoUrl: '/videos/traffic_demo.mp4',
     name: 'Ahmedabad-Vadodara Express Toll',
     city: 'Vadodara Toll',
     status: 'ONLINE',
@@ -70,7 +70,7 @@ const CAMERAS = [
   {
     id: 'CAM-005',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_05/stream',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+    videoUrl: '/videos/traffic_demo.mp4',
     name: 'Overhead Surveillance Matrix',
     city: 'Gandhinagar',
     status: 'ONLINE',
