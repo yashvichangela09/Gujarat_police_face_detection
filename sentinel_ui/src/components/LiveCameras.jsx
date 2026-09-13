@@ -117,13 +117,20 @@ function CameraVideo({ src, className }) {
 }
 
 function EmbeddedMatrixDashboard({ onBack }) {
+  const [matrixFilter, setMatrixFilter] = useState('ALL'); // 'ALL' | 'VEHICLES' | 'FACES'
   const [reidLogs] = useState([
-    { id: 'REID-901', time: '16:18:02', vehicleId: 'VEH_GLOBAL_0001', fromCam: 'CAM-001', toCam: 'CAM-002', plate: 'GJ-01-AB-1234', conf: '98.4%', target: '👤 CITIZEN: CLEAR', targetStatus: 'CLEAR' },
-    { id: 'REID-902', time: '16:18:15', vehicleId: 'VEH_GLOBAL_0003', fromCam: 'CAM-002', toCam: 'CAM-004', plate: 'GJ-05-CD-3321', conf: '96.2%', target: '🚨 WANTED: Shahrukh Khan', targetStatus: 'WANTED' },
-    { id: 'REID-903', time: '16:18:30', vehicleId: 'VEH_GLOBAL_0005', fromCam: 'CAM-003', toCam: 'CAM-005', plate: 'GJ-06-ZZ-9900', conf: '95.8%', target: '🚨 WANTED: Ajay Devgan', targetStatus: 'WANTED' },
-    { id: 'REID-904', time: '16:18:44', vehicleId: 'VEH_GLOBAL_0002', fromCam: 'CAM-001', toCam: 'CAM-003', plate: 'GJ-01-XY-5678', conf: '94.7%', target: '👤 CITIZEN: CLEAR', targetStatus: 'CLEAR' },
-    { id: 'REID-905', time: '16:19:01', vehicleId: 'VEH_GLOBAL_0004', fromCam: 'CAM-004', toCam: 'CAM-005', plate: 'GJ-18-Z-4411', conf: '97.1%', target: '👤 CITIZEN: CLEAR', targetStatus: 'CLEAR' },
+    { id: 'REID-901', time: '16:18:02', vehicleId: 'VEH_GLOBAL_0001', fromCam: 'CAM-001', toCam: 'CAM-002', plate: 'GJ-01-AB-1234', conf: '98.4%', target: '👤 CITIZEN: CLEAR', targetStatus: 'CLEAR', type: 'VEHICLE' },
+    { id: 'REID-902', time: '16:18:15', vehicleId: 'VEH_GLOBAL_0003', fromCam: 'CAM-002', toCam: 'CAM-004', plate: 'GJ-05-CD-3321', conf: '96.2%', target: '🚨 WANTED: Shahrukh Khan', targetStatus: 'WANTED', type: 'FACE' },
+    { id: 'REID-903', time: '16:18:30', vehicleId: 'VEH_GLOBAL_0005', fromCam: 'CAM-003', toCam: 'CAM-005', plate: 'GJ-06-ZZ-9900', conf: '95.8%', target: '🚨 WANTED: Ajay Devgan', targetStatus: 'WANTED', type: 'FACE' },
+    { id: 'REID-904', time: '16:18:44', vehicleId: 'VEH_GLOBAL_0002', fromCam: 'CAM-001', toCam: 'CAM-003', plate: 'GJ-01-XY-5678', conf: '94.7%', target: '👤 CITIZEN: CLEAR', targetStatus: 'CLEAR', type: 'VEHICLE' },
+    { id: 'REID-905', time: '16:19:01', vehicleId: 'VEH_GLOBAL_0004', fromCam: 'CAM-004', toCam: 'CAM-005', plate: 'GJ-18-Z-4411', conf: '97.1%', target: '👤 CITIZEN: CLEAR', targetStatus: 'CLEAR', type: 'VEHICLE' },
   ]);
+
+  const filteredLogs = reidLogs.filter(log => {
+    if (matrixFilter === 'VEHICLES') return log.type === 'VEHICLE';
+    if (matrixFilter === 'FACES') return log.type === 'FACE';
+    return true;
+  });
 
   return (
     <div className="w-full bg-command-card rounded-xl border border-cyan-500/50 p-4 space-y-4 shadow-2xl font-mono">
@@ -215,14 +222,40 @@ function EmbeddedMatrixDashboard({ onBack }) {
         </div>
       </div>
 
-      {/* Cross-Camera Vehicle Re-ID Audit Log Table */}
+      {/* Cross-Camera Vehicle Re-ID Audit Log Table with Filter */}
       <div className="bg-command-bg p-3 rounded-lg border border-command-border space-y-2 text-xs">
-        <div className="flex justify-between items-center border-b border-command-border pb-2">
+        <div className="flex flex-wrap justify-between items-center border-b border-command-border pb-2 gap-2">
           <h3 className="font-bold text-slate-200 flex items-center gap-2">
             <Layers className="w-4 h-4 text-cyan-400" />
             CROSS-CAMERA VEHICLE RE-IDENTIFICATION & WATCHLIST MATCH LOGS
           </h3>
-          <span className="text-[10px] text-emerald-400 font-bold">LIVE TELEMETRY SYNCED</span>
+
+          <div className="flex bg-black/80 p-1 rounded border border-cyan-500/40 gap-1 font-mono text-[10px]">
+            <button
+              onClick={() => setMatrixFilter('ALL')}
+              className={`px-2.5 py-1 rounded font-bold transition ${
+                matrixFilter === 'ALL' ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-500/50' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              🌐 ALL MATCHES ({reidLogs.length})
+            </button>
+            <button
+              onClick={() => setMatrixFilter('VEHICLES')}
+              className={`px-2.5 py-1 rounded font-bold transition ${
+                matrixFilter === 'VEHICLES' ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              🚗 VEHICLES ONLY (3)
+            </button>
+            <button
+              onClick={() => setMatrixFilter('FACES')}
+              className={`px-2.5 py-1 rounded font-bold transition ${
+                matrixFilter === 'FACES' ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-500/50' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              👤 WATCHLIST FACES ONLY (2)
+            </button>
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -238,7 +271,7 @@ function EmbeddedMatrixDashboard({ onBack }) {
               </tr>
             </thead>
             <tbody>
-              {reidLogs.map((log) => (
+              {filteredLogs.map((log) => (
                 <tr key={log.id} className="border-b border-command-border/40 hover:bg-cyan-950/20">
                   <td className="py-1.5 px-2 text-slate-400">{log.time}</td>
                   <td className="py-1.5 px-2 font-bold text-cyan-300">{log.vehicleId}</td>
@@ -269,6 +302,7 @@ export default function LiveCameras() {
   const [gridMode, setGridMode] = useState('2x2');
   const [isNightVision, setIsNightVision] = useState(false);
   const [isBoundingBoxEnabled, setIsBoundingBoxEnabled] = useState(true);
+  const [overlayFilterMode, setOverlayFilterMode] = useState('ALL'); // 'ALL' | 'VEHICLES' | 'FACES'
   const [isAiServiceRunning, setIsAiServiceRunning] = useState(false);
   const [aiServiceStatus, setAiServiceStatus] = useState('');
   const [ptzZoom, setPtzZoom] = useState(1.0);
@@ -407,6 +441,41 @@ export default function LiveCameras() {
             <Eye className="w-3.5 h-3.5" />
             <span>AI OVERLAY: {isBoundingBoxEnabled ? 'ENABLED' : 'HIDDEN'}</span>
           </button>
+
+          {isBoundingBoxEnabled && (
+            <div className="flex bg-command-bg p-1 rounded-lg border border-cyan-500/40 gap-1 font-mono text-xs">
+              <button
+                onClick={() => setOverlayFilterMode('ALL')}
+                className={`px-2.5 py-1 rounded font-bold transition ${
+                  overlayFilterMode === 'ALL'
+                    ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-500/50 shadow-glow-cyan'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                🌐 ALL
+              </button>
+              <button
+                onClick={() => setOverlayFilterMode('VEHICLES')}
+                className={`px-2.5 py-1 rounded font-bold transition ${
+                  overlayFilterMode === 'VEHICLES'
+                    ? 'bg-amber-500/30 text-amber-300 border border-amber-500/50'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                🚗 VEHICLES ONLY
+              </button>
+              <button
+                onClick={() => setOverlayFilterMode('FACES')}
+                className={`px-2.5 py-1 rounded font-bold transition ${
+                  overlayFilterMode === 'FACES'
+                    ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-500/50 shadow-glow-emerald'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                👤 FACES ONLY
+              </button>
+            </div>
+          )}
 
           <button
             onClick={() => setShowEmbeddedMatrix(!showEmbeddedMatrix)}
@@ -575,50 +644,56 @@ export default function LiveCameras() {
                     </div>
 
                     {/* Dynamic AI Bounding Boxes Overlay */}
-                    {isBoundingBoxEnabled && bboxes.map((box) => (
-                      <div
-                        key={box.id}
-                        className="absolute z-20 border-2 rounded transition-all duration-300 font-mono text-[10px]"
-                        style={{
-                          left: `${box.x}%`,
-                          top: `${box.y}%`,
-                          width: `${box.w}%`,
-                          height: `${box.h}%`,
-                          borderColor: box.color,
-                          boxShadow: `0 0 12px ${box.color}88`
-                        }}
-                      >
-                        {/* Box Header Label */}
-                        <div 
-                          className="absolute -top-5 left-0 px-1.5 py-0.5 rounded text-black font-bold whitespace-nowrap flex items-center gap-1"
-                          style={{ backgroundColor: box.color }}
+                    {isBoundingBoxEnabled && bboxes
+                      .filter((box) => {
+                        if (overlayFilterMode === 'VEHICLES') return true;
+                        if (overlayFilterMode === 'FACES') return !!box.faceLabel;
+                        return true;
+                      })
+                      .map((box) => (
+                        <div
+                          key={box.id}
+                          className="absolute z-20 border-2 rounded transition-all duration-300 font-mono text-[10px]"
+                          style={{
+                            left: `${box.x}%`,
+                            top: `${box.y}%`,
+                            width: overlayFilterMode === 'FACES' ? `${box.w * 0.65}%` : `${box.w}%`,
+                            height: overlayFilterMode === 'FACES' ? `${box.h * 0.65}%` : `${box.h}%`,
+                            borderColor: overlayFilterMode === 'FACES' 
+                              ? (box.isWanted ? '#ef4444' : '#10b981')
+                              : box.color,
+                            boxShadow: overlayFilterMode === 'FACES'
+                              ? (box.isWanted ? '0 0 14px #ef4444' : '0 0 14px #10b981')
+                              : `0 0 10px ${box.color}88`
+                          }}
                         >
-                          <span>{box.label}</span>
-                          <span>{(box.conf * 100).toFixed(0)}%</span>
+                          {/* Face Recognition Badge when in FACES or ALL mode */}
+                          {(overlayFilterMode === 'FACES' || overlayFilterMode === 'ALL') && box.faceLabel && (
+                            <div 
+                              className={`absolute -top-6 left-0 px-2 py-0.5 rounded font-bold whitespace-nowrap flex items-center gap-1 shadow-md text-[9px] ${
+                                box.isWanted ? 'bg-rose-600 text-white animate-pulse' : 'bg-emerald-600 text-white'
+                              }`}
+                            >
+                              <span>{box.faceLabel}</span>
+                            </div>
+                          )}
+
+                          {/* Vehicle Header & ANPR Plate when in VEHICLES or ALL mode */}
+                          {(overlayFilterMode === 'VEHICLES' || overlayFilterMode === 'ALL') && (
+                            <>
+                              <div 
+                                className="absolute -top-5 left-0 px-1.5 py-0.5 rounded text-black font-bold whitespace-nowrap flex items-center gap-1 text-[9px]"
+                                style={{ backgroundColor: box.color }}
+                              >
+                                <span>{box.label}</span>
+                                <span>{(box.conf * 100).toFixed(0)}%</span>
+                              </div>
+                              <div className="absolute -bottom-5 left-0 bg-black/90 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/60 font-bold whitespace-nowrap text-[9px]">
+                                {box.plate} • {box.speed} km/h
+                              </div>
+                            </>
+                          )}
                         </div>
-
-                        {/* Face Recognition Badge */}
-                        {box.faceLabel && (
-                          <div 
-                            className={`absolute -top-10 left-0 px-1.5 py-0.5 rounded font-bold whitespace-nowrap flex items-center gap-1 shadow-md ${
-                              box.isWanted ? 'bg-rose-600 text-white animate-pulse' : 'bg-emerald-600 text-white'
-                            }`}
-                          >
-                            <span>{box.faceLabel}</span>
-                          </div>
-                        )}
-
-                        {/* ANPR Plate Badge */}
-                        <div className="absolute -bottom-5 left-0 bg-black/90 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/60 font-bold whitespace-nowrap">
-                          {box.plate} • {box.speed} km/h
-                        </div>
-
-                        {box.isSpeeding && (
-                          <div className="absolute -top-14 left-0 bg-rose-600 text-white font-extrabold px-1.5 py-0.5 rounded animate-bounce shadow-glow-alert">
-                            ⚠️ OVERSPEED VIOLATION
-                          </div>
-                        )}
-                      </div>
                     ))}
 
                     {/* Center Crosshair */}
