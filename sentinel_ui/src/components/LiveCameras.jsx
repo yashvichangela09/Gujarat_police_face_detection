@@ -327,48 +327,95 @@ export default function LiveCameras() {
   const [bboxes, setBboxes] = useState([]);
 
   useEffect(() => {
-    // Generate realistic moving AI bounding boxes
+    // Stable vehicle targets locked to actual road lanes in traffic_demo.mp4
+    const targets = [
+      {
+        id: 0,
+        label: 'CAR (Sedan)',
+        conf: 0.96,
+        color: '#00f2fe',
+        plate: 'GJ-01-AB-1234',
+        speed: 54,
+        faceLabel: 'CITIZEN: CLEAR',
+        isWanted: false,
+        baseX: 8,
+        baseY: 48,
+        w: 22,
+        h: 21,
+        dirX: 0.6,
+        dirY: 0.4
+      },
+      {
+        id: 1,
+        label: 'MOTORCYCLE',
+        conf: 0.89,
+        color: '#00f5d4',
+        plate: 'GJ-01-XY-5678',
+        speed: 42,
+        faceLabel: 'CITIZEN: CLEAR',
+        isWanted: false,
+        baseX: 34,
+        baseY: 55,
+        w: 16,
+        h: 20,
+        dirX: 0.4,
+        dirY: 0.5
+      },
+      {
+        id: 2,
+        label: 'CAR (SUV)',
+        conf: 0.95,
+        color: '#ff2a6d',
+        plate: 'GJ-05-CD-3321',
+        speed: 68,
+        faceLabel: '🚨 WANTED: Shahrukh Khan',
+        isWanted: true,
+        baseX: 52,
+        baseY: 46,
+        w: 22,
+        h: 22,
+        dirX: 0.5,
+        dirY: 0.3
+      },
+      {
+        id: 3,
+        label: 'BUS (GSRTC)',
+        conf: 0.96,
+        color: '#9d4edd',
+        plate: 'GJ-18-Z-4411',
+        speed: 45,
+        faceLabel: 'CITIZEN: CLEAR',
+        isWanted: false,
+        baseX: 72,
+        baseY: 50,
+        w: 23,
+        h: 22,
+        dirX: 0.3,
+        dirY: 0.4
+      }
+    ];
+
+    let step = 0;
     const interval = setInterval(() => {
-      const vehicleTypes = [
-        { label: 'CAR (Sedan)', conf: 0.96, color: '#00f2fe', plate: 'GJ-01-AB-1234', faceLabel: 'CITIZEN: CLEAR', isWanted: false },
-        { label: 'MOTORCYCLE', conf: 0.88, color: '#00f5d4', plate: 'GJ-01-XY-5678', faceLabel: 'CITIZEN: CLEAR', isWanted: false },
-        { label: 'CAR (SUV)', conf: 0.94, color: '#ff2a6d', plate: 'GJ-05-CD-3321', faceLabel: '🚨 WANTED: Shahrukh Khan', isWanted: true },
-        { label: 'BUS (GSRTC)', conf: 0.95, color: '#9d4edd', plate: 'GJ-18-Z-4411', faceLabel: 'CITIZEN: CLEAR', isWanted: false },
-        { label: 'CAR (Sedan)', conf: 0.92, color: '#ff2a6d', plate: 'GJ-06-ZZ-9900', faceLabel: '🚨 WANTED: Ajay Devgan', isWanted: true },
-      ];
+      step += 1;
+      const t = step * 0.15;
 
-      const basePositions = [
-        { baseX: 6,  baseY: 46, w: 20, h: 20 }, // Road Lane 1 (Left Sedan)
-        { baseX: 30, baseY: 52, w: 18, h: 20 }, // Road Lane 2 (Center Motorcycle)
-        { baseX: 50, baseY: 46, w: 20, h: 20 }, // Road Lane 3 (Center-Right SUV)
-        { baseX: 70, baseY: 50, w: 22, h: 20 }, // Road Lane 4 (Right Bus)
-      ];
+      const newBoxes = targets.map((tTarget) => {
+        // Smooth linear lane motion along road vector without high-frequency jitter
+        const driftX = Math.sin(t * tTarget.dirX) * 2.5;
+        const driftY = Math.cos(t * tTarget.dirY) * 2.0;
 
-      const newBoxes = Array.from({ length: 4 }).map((_, idx) => {
-        const item = vehicleTypes[idx % vehicleTypes.length];
-        const pos = basePositions[idx % basePositions.length];
-        const time = Date.now() / 1000;
-        const offsetX = Math.sin(time + idx * 1.5) * 3;
-        const offsetY = Math.cos(time * 1.2 + idx) * 2;
-        const speed = Math.floor(48 + Math.random() * 32);
         return {
-          id: idx,
-          x: Math.max(5, Math.min(72, pos.baseX + offsetX)),
-          y: Math.max(40, Math.min(65, pos.baseY + offsetY)),
-          w: pos.w,
-          h: pos.h,
-          label: item.label,
-          conf: (item.conf + Math.random() * 0.03 - 0.015).toFixed(2),
-          color: item.isWanted ? '#ff2a6d' : (speed > selectedCam.speedLimit ? '#ff2a6d' : item.color),
-          plate: item.plate,
-          speed,
-          isSpeeding: speed > selectedCam.speedLimit,
-          faceLabel: item.faceLabel,
-          isWanted: item.isWanted,
+          ...tTarget,
+          x: Math.max(5, Math.min(72, tTarget.baseX + driftX)),
+          y: Math.max(42, Math.min(65, tTarget.baseY + driftY)),
+          conf: tTarget.conf.toFixed(2),
+          isSpeeding: tTarget.speed > selectedCam.speedLimit,
         };
       });
+
       setBboxes(newBoxes);
-    }, 600);
+    }, 400);
 
     return () => clearInterval(interval);
   }, [selectedCam]);
@@ -673,7 +720,7 @@ export default function LiveCameras() {
                       return (
                         <div
                           key={box.id}
-                          className="absolute z-20 transition-all duration-300 font-mono text-[10px] pointer-events-none border-2 rounded-md shadow-lg"
+                          className="absolute z-20 transition-all duration-500 ease-out font-mono text-[10px] pointer-events-none border-2 rounded-md shadow-lg"
                           style={{
                             left: `${box.x}%`,
                             top: `${box.y}%`,
