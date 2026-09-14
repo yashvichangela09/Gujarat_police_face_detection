@@ -10,50 +10,50 @@ const MOCK_EVENTS = [
   {
     id: 101,
     camera_id: 'CAM-001',
-    detection_type: 'InsightFace Watchlist Alert',
-    label: '🚨 WANTED: Shahrukh Khan (FIR #2026/0891)',
-    confidence: 0.964,
-    track_id: 'FACE_ID_089',
-    number_plate: 'GJ01AB4421',
+    detection_type: 'ANPR License Plate OCR',
+    label: 'PLATE: GJ-01-AB-1234 • OWNER: Ramesh Shah [VERIFIED]',
+    confidence: 0.988,
+    track_id: 'VEH_GLOBAL_0001',
+    number_plate: 'GJ-01-AB-1234',
     vehicle_type: 'CAR (Sedan)',
     color: 'WHITE',
-    timestamp: '15:26:10'
+    timestamp: '12:22:10'
   },
   {
     id: 102,
     camera_id: 'CAM-001',
-    detection_type: 'ANPR License Plate OCR',
-    label: 'PLATE: GJ01AB4421 [VERIFIED]',
-    confidence: 0.982,
-    track_id: 'VEH_GLOBAL_0001',
-    number_plate: 'GJ01AB4421',
-    vehicle_type: 'CAR (Sedan)',
-    color: 'WHITE',
-    timestamp: '15:26:12'
+    detection_type: 'ANPR + Stolen Watchlist Alert',
+    label: '🚨 STOLEN ALERT: GJ-05-CD-3321 • OWNER: Suresh Mehta',
+    confidence: 0.975,
+    track_id: 'VEH_GLOBAL_0002',
+    number_plate: 'GJ-05-CD-3321',
+    vehicle_type: 'CAR (SUV)',
+    color: 'RED',
+    timestamp: '12:22:15'
   },
   {
     id: 103,
     camera_id: 'CAM-002',
-    detection_type: 'YOLOv11 Vehicle Track',
-    label: 'TRUCK (Heavy) • BLACK',
-    confidence: 0.941,
-    track_id: 'VEH_GLOBAL_0004',
-    number_plate: 'GJ06ZZ9900',
-    vehicle_type: 'TRUCK',
+    detection_type: 'ANPR License Plate OCR',
+    label: 'PLATE: GJ-01-XY-5678 • OWNER: Vikram Patel [VALID]',
+    confidence: 0.945,
+    track_id: 'VEH_GLOBAL_0003',
+    number_plate: 'GJ-01-XY-5678',
+    vehicle_type: 'MOTORCYCLE',
     color: 'BLACK',
-    timestamp: '15:26:14'
+    timestamp: '12:22:20'
   },
   {
     id: 104,
     camera_id: 'CAM-003',
-    detection_type: 'InsightFace Citizen Status',
-    label: '👤 CITIZEN: CLEAR (NO RECORD)',
-    confidence: 0.985,
-    track_id: 'FACE_ID_104',
-    number_plate: 'GJ05CD3321',
-    vehicle_type: 'MOTORCYCLE',
-    color: 'BLACK',
-    timestamp: '15:26:16'
+    detection_type: 'ANPR Fleet Intelligence',
+    label: 'PLATE: GJ-18-Z-4411 • GSRTC BUS FLEET #804',
+    confidence: 0.992,
+    track_id: 'VEH_GLOBAL_0004',
+    number_plate: 'GJ-18-Z-4411',
+    vehicle_type: 'BUS (GSRTC)',
+    color: 'PURPLE',
+    timestamp: '12:22:25'
   }
 ];
 

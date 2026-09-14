@@ -10,14 +10,14 @@ const CAMERAS = [
   {
     id: 'CAM-001',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_01/stream',
-    videoUrl: '/videos/traffic_demo.mp4?v=cam1',
+    videoUrl: '/videos/vehical.mp4?v=cam1',
     name: 'SG Highway - Iskcon Crossroad',
     city: 'Ahmedabad',
     status: 'ONLINE',
     fps: 30,
-    resolution: '1280x720',
+    resolution: '1920x1080',
     rtsp_url: 'http://127.0.0.1:5000/api/camera/CAMERA_01/stream',
-    type: 'YOLOv11 + ANPR + Re-ID',
+    type: 'YOLOv11 ANPR + Vehicle Recognition',
     speedLimit: 70,
     detectionsCount: 42,
     bgGradient: 'from-blue-950 via-slate-900 to-cyan-950'
@@ -25,14 +25,14 @@ const CAMERAS = [
   {
     id: 'CAM-002',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_02/stream',
-    videoUrl: '/videos/traffic_demo.mp4?v=cam2',
+    videoUrl: '/videos/vehical.mp4?v=cam2',
     name: 'Sabarmati Riverfront East',
     city: 'Ahmedabad',
     status: 'ONLINE',
     fps: 30,
-    resolution: '1280x720',
+    resolution: '1920x1080',
     rtsp_url: 'http://127.0.0.1:5000/api/camera/CAMERA_02/stream',
-    type: 'YOLOv11 + Vehicle Re-ID',
+    type: 'ANPR + Owner Lookup',
     speedLimit: 40,
     detectionsCount: 18,
     bgGradient: 'from-slate-950 via-cyan-950 to-indigo-950'
@@ -40,14 +40,14 @@ const CAMERAS = [
   {
     id: 'CAM-003',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_03/stream',
-    videoUrl: '/videos/traffic_demo.mp4?v=cam3',
+    videoUrl: '/videos/vehical.mp4?v=cam3',
     name: 'Surat Textile Market Circle',
     city: 'Surat',
     status: 'ONLINE',
     fps: 30,
-    resolution: '1280x720',
+    resolution: '1920x1080',
     rtsp_url: 'http://127.0.0.1:5000/api/camera/CAMERA_03/stream',
-    type: 'Traffic Flow & ANPR',
+    type: 'High-Speed ANPR Scanner',
     speedLimit: 50,
     detectionsCount: 65,
     bgGradient: 'from-indigo-950 via-slate-900 to-blue-950'
@@ -55,14 +55,14 @@ const CAMERAS = [
   {
     id: 'CAM-004',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_04/stream',
-    videoUrl: '/videos/traffic_demo.mp4?v=cam4',
+    videoUrl: '/videos/vehical.mp4?v=cam4',
     name: 'Ahmedabad-Vadodara Express Toll',
     city: 'Vadodara Toll',
     status: 'ONLINE',
     fps: 30,
-    resolution: '1280x720',
+    resolution: '1920x1080',
     rtsp_url: 'http://127.0.0.1:5000/api/camera/CAMERA_04/stream',
-    type: 'High-Speed ANPR Radar',
+    type: 'Tollgate ANPR Radar',
     speedLimit: 100,
     detectionsCount: 89,
     bgGradient: 'from-cyan-950 via-slate-950 to-blue-950'
@@ -70,14 +70,14 @@ const CAMERAS = [
   {
     id: 'CAM-005',
     streamUrl: 'http://127.0.0.1:5000/api/camera/CAMERA_05/stream',
-    videoUrl: '/videos/traffic_demo.mp4?v=cam5',
+    videoUrl: '/videos/vehical.mp4?v=cam5',
     name: 'Overhead Surveillance Matrix',
     city: 'Gandhinagar',
     status: 'ONLINE',
     fps: 30,
-    resolution: '1280x720',
+    resolution: '1920x1080',
     rtsp_url: 'http://127.0.0.1:5000/api/camera/CAMERA_05/stream',
-    type: 'Multi-Vehicle Detection',
+    type: 'ANPR + Owner Intelligence',
     speedLimit: 45,
     detectionsCount: 31,
     bgGradient: 'from-slate-950 via-blue-950 to-cyan-950'
@@ -323,71 +323,75 @@ export default function LiveCameras() {
   const [snapshotNotice, setSnapshotNotice] = useState('');
   const [showEmbeddedMatrix, setShowEmbeddedMatrix] = useState(false);
 
-  // Dynamic Animated Bounding Boxes State
+  // Dynamic Animated Bounding Boxes State (ANPR Vehicle & Owner Intelligence Focus)
   const [bboxes, setBboxes] = useState([]);
 
   useEffect(() => {
-    // Stable vehicle targets locked to actual road lanes in traffic_demo.mp4
+    // High-Precision ANPR Targets for vehical.mp4
     const targets = [
       {
         id: 0,
         label: 'CAR (Sedan)',
-        conf: 0.96,
+        conf: 0.98,
         color: '#00f2fe',
         plate: 'GJ-01-AB-1234',
+        owner: 'OWNER: Ramesh Shah',
+        statusTag: 'REGISTRATION: VALID',
         speed: 54,
-        faceLabel: 'CITIZEN: CLEAR',
         isWanted: false,
-        baseX: 8,
+        baseX: 10,
         baseY: 48,
-        w: 22,
-        h: 21,
-        dirX: 0.6,
-        dirY: 0.4
-      },
-      {
-        id: 1,
-        label: 'MOTORCYCLE',
-        conf: 0.89,
-        color: '#00f5d4',
-        plate: 'GJ-01-XY-5678',
-        speed: 42,
-        faceLabel: 'CITIZEN: CLEAR',
-        isWanted: false,
-        baseX: 34,
-        baseY: 55,
-        w: 16,
-        h: 20,
-        dirX: 0.4,
-        dirY: 0.5
-      },
-      {
-        id: 2,
-        label: 'CAR (SUV)',
-        conf: 0.95,
-        color: '#ff2a6d',
-        plate: 'GJ-05-CD-3321',
-        speed: 68,
-        faceLabel: '🚨 WANTED: Shahrukh Khan',
-        isWanted: true,
-        baseX: 52,
-        baseY: 46,
-        w: 22,
+        w: 24,
         h: 22,
         dirX: 0.5,
         dirY: 0.3
       },
       {
+        id: 1,
+        label: 'MOTORCYCLE',
+        conf: 0.94,
+        color: '#00f5d4',
+        plate: 'GJ-01-XY-5678',
+        owner: 'OWNER: Vikram Patel',
+        statusTag: 'REGISTRATION: VALID',
+        speed: 42,
+        isWanted: false,
+        baseX: 36,
+        baseY: 54,
+        w: 18,
+        h: 20,
+        dirX: 0.4,
+        dirY: 0.4
+      },
+      {
+        id: 2,
+        label: 'CAR (SUV)',
+        conf: 0.97,
+        color: '#ff2a6d',
+        plate: 'GJ-05-CD-3321',
+        owner: 'OWNER: Suresh Mehta',
+        statusTag: '🚨 POLICE STOLEN ALERT',
+        speed: 76,
+        isWanted: true,
+        baseX: 54,
+        baseY: 45,
+        w: 24,
+        h: 23,
+        dirX: 0.6,
+        dirY: 0.3
+      },
+      {
         id: 3,
         label: 'BUS (GSRTC)',
-        conf: 0.96,
+        conf: 0.99,
         color: '#9d4edd',
         plate: 'GJ-18-Z-4411',
-        speed: 45,
-        faceLabel: 'CITIZEN: CLEAR',
+        owner: 'GSRTC FLEET #804',
+        statusTag: 'REGISTRATION: VALID',
+        speed: 48,
         isWanted: false,
         baseX: 72,
-        baseY: 50,
+        baseY: 48,
         w: 23,
         h: 22,
         dirX: 0.3,
@@ -401,14 +405,13 @@ export default function LiveCameras() {
       const t = step * 0.15;
 
       const newBoxes = targets.map((tTarget) => {
-        // Smooth linear lane motion along road vector without high-frequency jitter
-        const driftX = Math.sin(t * tTarget.dirX) * 2.5;
-        const driftY = Math.cos(t * tTarget.dirY) * 2.0;
+        const driftX = Math.sin(t * tTarget.dirX) * 2.2;
+        const driftY = Math.cos(t * tTarget.dirY) * 1.8;
 
         return {
           ...tTarget,
           x: Math.max(5, Math.min(72, tTarget.baseX + driftX)),
-          y: Math.max(42, Math.min(65, tTarget.baseY + driftY)),
+          y: Math.max(40, Math.min(65, tTarget.baseY + driftY)),
           conf: tTarget.conf.toFixed(2),
           isSpeeding: tTarget.speed > selectedCam.speedLimit,
         };
@@ -730,39 +733,43 @@ export default function LiveCameras() {
                             backgroundColor: `${box.color}15`,
                           }}
                         >
-                          {/* Top Badge Strip (Flex row containing Vehicle + Face Badges side-by-side with zero overlap) */}
+                          {/* Top Badge Strip (ANPR Vehicle Class + Owner Name) */}
                           <div className="absolute -top-6 left-0 flex items-center gap-1 z-30 pointer-events-none whitespace-nowrap">
-                            {showVehicle && (
-                              <div className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-black/90 text-cyan-300 border border-cyan-500/60 shadow-md">
-                                {box.label} {Math.round(box.conf * 100)}%
-                              </div>
-                            )}
-                            {showFace && box.faceLabel && (
-                              <div 
-                                className={`px-1.5 py-0.5 rounded text-[9px] font-bold flex items-center gap-1 shadow-md border ${
-                                  box.isWanted 
-                                    ? 'bg-rose-600/95 text-white border-rose-400 animate-pulse' 
-                                    : 'bg-emerald-700/95 text-white border-emerald-400'
-                                }`}
-                              >
-                                <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-                                <span>{box.faceLabel}</span>
+                            <div className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-black/90 text-cyan-300 border border-cyan-500/60 shadow-md">
+                              {box.label} {Math.round(box.conf * 100)}%
+                            </div>
+                            {box.owner && (
+                              <div className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-900/90 text-slate-200 border border-slate-700 shadow-md">
+                                {box.owner}
                               </div>
                             )}
                           </div>
 
-                          {/* Bottom ANPR License Plate & Speed Badge (Positioned INSIDE bottom-left of Box for Zero Outer Collision) */}
-                          {showVehicle && box.plate && (
-                            <div 
-                              className={`absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap border shadow-md z-30 ${
-                                box.isSpeeding 
-                                  ? 'bg-rose-950/95 text-rose-300 border-rose-500 animate-pulse' 
-                                  : 'bg-black/90 text-amber-300 border-amber-500/60'
-                              }`}
-                            >
-                              🚘 {box.plate} {box.speed ? `• ${box.speed} KM/H` : ''}
-                            </div>
-                          )}
+                          {/* Bottom ANPR License Plate & Registration Alert Tag */}
+                          <div className="absolute bottom-1 left-1 flex flex-col gap-0.5 z-30">
+                            {box.plate && (
+                              <div 
+                                className={`px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap border shadow-md ${
+                                  box.isSpeeding 
+                                    ? 'bg-rose-950/95 text-rose-300 border-rose-500 animate-pulse' 
+                                    : 'bg-black/90 text-amber-300 border-amber-500/60'
+                                }`}
+                              >
+                                🚘 {box.plate} {box.speed ? `• ${box.speed} KM/H` : ''}
+                              </div>
+                            )}
+                            {box.statusTag && (
+                              <div 
+                                className={`px-1.5 py-0.5 rounded text-[8px] font-bold whitespace-nowrap border shadow-md ${
+                                  box.isWanted 
+                                    ? 'bg-rose-600/95 text-white border-rose-400 animate-pulse' 
+                                    : 'bg-emerald-950/90 text-emerald-300 border-emerald-600/60'
+                                }`}
+                              >
+                                {box.statusTag}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       );
                     })}
