@@ -733,43 +733,38 @@ export default function LiveCameras() {
                             backgroundColor: `${box.color}15`,
                           }}
                         >
-                          {/* Top Badge Strip (ANPR Vehicle Class + Owner Name) */}
-                          <div className="absolute -top-6 left-0 flex items-center gap-1 z-30 pointer-events-none whitespace-nowrap">
-                            <div className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-black/90 text-cyan-300 border border-cyan-500/60 shadow-md">
-                              {box.label} {Math.round(box.conf * 100)}%
-                            </div>
+                          {/* Integrated Sleek Top Badge Header */}
+                          <div className={`absolute -top-5 left-0 px-2 py-0.5 rounded-t text-[9px] font-extrabold flex items-center gap-1.5 shadow-md border-t border-x z-30 pointer-events-none whitespace-nowrap ${
+                            box.isWanted 
+                              ? 'bg-rose-950/95 text-rose-200 border-rose-500 animate-pulse' 
+                              : 'bg-black/90 text-cyan-300 border-cyan-500/60'
+                          }`}>
+                            <span>🚘 {box.label}</span>
                             {box.owner && (
-                              <div className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-900/90 text-slate-200 border border-slate-700 shadow-md">
-                                {box.owner}
-                              </div>
+                              <>
+                                <span className="text-slate-500">•</span>
+                                <span className="text-slate-200 font-bold">{box.owner.replace('OWNER: ', '')}</span>
+                              </>
                             )}
                           </div>
 
-                          {/* Bottom ANPR License Plate & Registration Alert Tag */}
-                          <div className="absolute bottom-1 left-1 flex flex-col gap-0.5 z-30">
-                            {box.plate && (
-                              <div 
-                                className={`px-1.5 py-0.5 rounded text-[9px] font-bold whitespace-nowrap border shadow-md ${
-                                  box.isSpeeding 
-                                    ? 'bg-rose-950/95 text-rose-300 border-rose-500 animate-pulse' 
-                                    : 'bg-black/90 text-amber-300 border-amber-500/60'
-                                }`}
-                              >
-                                🚘 {box.plate} {box.speed ? `• ${box.speed} KM/H` : ''}
-                              </div>
-                            )}
-                            {box.statusTag && (
-                              <div 
-                                className={`px-1.5 py-0.5 rounded text-[8px] font-bold whitespace-nowrap border shadow-md ${
-                                  box.isWanted 
-                                    ? 'bg-rose-600/95 text-white border-rose-400 animate-pulse' 
-                                    : 'bg-emerald-950/90 text-emerald-300 border-emerald-600/60'
-                                }`}
-                              >
-                                {box.statusTag}
-                              </div>
-                            )}
-                          </div>
+                          {/* Integrated Sleek Bottom ANPR Plate Tag */}
+                          {box.plate && (
+                            <div className={`absolute bottom-1 left-1 px-2 py-0.5 rounded text-[9px] font-bold whitespace-nowrap flex items-center gap-1.5 shadow-md border z-30 ${
+                              box.isWanted 
+                                ? 'bg-rose-600/95 text-white border-rose-300 shadow-glow-alert animate-pulse' 
+                                : 'bg-black/90 text-amber-300 border-amber-500/60'
+                            }`}>
+                              <span>{box.plate}</span>
+                              <span>•</span>
+                              <span className={box.isSpeeding ? 'text-rose-400 font-extrabold' : 'text-slate-300'}>{box.speed} KM/H</span>
+                              {box.isWanted && (
+                                <span className="bg-black/80 text-rose-300 px-1 py-0.2 rounded text-[8px] font-extrabold border border-rose-400">
+                                  🚨 STOLEN
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </div>
                       );
                     })}
