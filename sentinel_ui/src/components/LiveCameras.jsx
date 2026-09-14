@@ -323,11 +323,11 @@ export default function LiveCameras() {
   const [snapshotNotice, setSnapshotNotice] = useState('');
   const [showEmbeddedMatrix, setShowEmbeddedMatrix] = useState(false);
 
-  // Dynamic Animated Bounding Boxes State (ANPR Vehicle & Owner Intelligence Focus)
+  // Dynamic Animated Bounding Boxes State (ANPR Vehicle & Owner Intelligence Focus with Perspective Scaling)
   const [bboxes, setBboxes] = useState([]);
 
   useEffect(() => {
-    // High-Precision ANPR Targets for vehical.mp4
+    // 4 Distinct Vehicle targets moving along perspective road vectors
     const targets = [
       {
         id: 0,
@@ -335,16 +335,14 @@ export default function LiveCameras() {
         conf: 0.98,
         color: '#00f2fe',
         plate: 'GJ-01-AB-1234',
-        owner: 'OWNER: Ramesh Shah',
+        owner: 'Ramesh Shah',
         statusTag: 'REGISTRATION: VALID',
-        speed: 54,
+        speed: 58,
         isWanted: false,
-        baseX: 10,
-        baseY: 48,
-        w: 24,
-        h: 22,
-        dirX: 0.5,
-        dirY: 0.3
+        startX: 12, startY: 38,
+        endX: 6,    endY: 68,
+        baseW: 22,  baseH: 20,
+        speedFactor: 1.2
       },
       {
         id: 1,
@@ -352,16 +350,14 @@ export default function LiveCameras() {
         conf: 0.94,
         color: '#00f5d4',
         plate: 'GJ-01-XY-5678',
-        owner: 'OWNER: Vikram Patel',
+        owner: 'Vikram Patel',
         statusTag: 'REGISTRATION: VALID',
         speed: 42,
         isWanted: false,
-        baseX: 36,
-        baseY: 54,
-        w: 18,
-        h: 20,
-        dirX: 0.4,
-        dirY: 0.4
+        startX: 38, startY: 40,
+        endX: 30,   endY: 66,
+        baseW: 16,  baseH: 18,
+        speedFactor: 0.9
       },
       {
         id: 2,
@@ -369,16 +365,14 @@ export default function LiveCameras() {
         conf: 0.97,
         color: '#ff2a6d',
         plate: 'GJ-05-CD-3321',
-        owner: 'OWNER: Suresh Mehta',
+        owner: 'Suresh Mehta',
         statusTag: '🚨 POLICE STOLEN ALERT',
         speed: 76,
         isWanted: true,
-        baseX: 54,
-        baseY: 45,
-        w: 24,
-        h: 23,
-        dirX: 0.6,
-        dirY: 0.3
+        startX: 56, startY: 36,
+        endX: 52,   endY: 68,
+        baseW: 22,  baseH: 21,
+        speedFactor: 1.5
       },
       {
         id: 3,
@@ -390,35 +384,43 @@ export default function LiveCameras() {
         statusTag: 'REGISTRATION: VALID',
         speed: 48,
         isWanted: false,
-        baseX: 72,
-        baseY: 48,
-        w: 23,
-        h: 22,
-        dirX: 0.3,
-        dirY: 0.4
+        startX: 76, startY: 42,
+        endX: 70,   endY: 66,
+        baseW: 24,  baseH: 22,
+        speedFactor: 1.0
       }
     ];
 
-    let step = 0;
-    const interval = setInterval(() => {
-      step += 1;
-      const t = step * 0.15;
+    let progress = [0, 0.25, 0.5, 0.75]; // Staggered starting progress along road lane
 
-      const newBoxes = targets.map((tTarget) => {
-        const driftX = Math.sin(t * tTarget.dirX) * 2.2;
-        const driftY = Math.cos(t * tTarget.dirY) * 1.8;
+    const interval = setInterval(() => {
+      const newBoxes = targets.map((t, idx) => {
+        // Increment progress based on vehicle speed
+        progress[idx] = (progress[idx] + 0.02 * t.speedFactor) % 1.0;
+        const p = progress[idx];
+
+        // Interpolate position along road perspective vector
+        const currentX = t.startX + (t.endX - t.startX) * p;
+        const currentY = t.startY + (t.endY - t.startY) * p;
+
+        // Dynamic perspective scaling (boxes grow larger as vehicles move closer down the road)
+        const depthScale = 0.65 + ((currentY - 35) / 35) * 0.65;
+        const currentW = Math.round(t.baseW * depthScale);
+        const currentH = Math.round(t.baseH * depthScale);
 
         return {
-          ...tTarget,
-          x: Math.max(5, Math.min(72, tTarget.baseX + driftX)),
-          y: Math.max(40, Math.min(65, tTarget.baseY + driftY)),
-          conf: tTarget.conf.toFixed(2),
-          isSpeeding: tTarget.speed > selectedCam.speedLimit,
+          ...t,
+          x: Math.round(currentX),
+          y: Math.round(currentY),
+          w: currentW,
+          h: currentH,
+          conf: t.conf.toFixed(2),
+          isSpeeding: t.speed > selectedCam.speedLimit,
         };
       });
 
       setBboxes(newBoxes);
-    }, 400);
+    }, 150);
 
     return () => clearInterval(interval);
   }, [selectedCam]);
@@ -909,6 +911,60 @@ export default function LiveCameras() {
                 </button>
               </div>
 
+            </div>
+          </div>
+
+          {/* Live ANPR Vehicle Detection & Audit Logs Stream below CCTV Cameras */}
+          <div className="bg-command-card p-4 rounded-xl border border-cyan-500/40 space-y-3 font-mono">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-command-border pb-2">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider">
+                  LIVE ANPR VEHICLE RECOGNITION & OWNER AUDIT STREAM — {selectedCam.id}
+                </h3>
+              </div>
+              <span className="text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-500/50 px-2.5 py-0.5 rounded font-bold">
+                REAL-TIME HIGHWAY LOGS
+              </span>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="border-b border-command-border/60 text-slate-400 text-[10px] uppercase">
+                    <th className="py-2 px-3">TIMESTAMP</th>
+                    <th className="py-2 px-3">CAMERA</th>
+                    <th className="py-2 px-3">ANPR LICENSE PLATE</th>
+                    <th className="py-2 px-3">VEHICLE CLASS</th>
+                    <th className="py-2 px-3">OWNER IDENTIFICATION</th>
+                    <th className="py-2 px-3">SPEED</th>
+                    <th className="py-2 px-3">REGISTRATION STATUS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bboxes.map((box) => (
+                    <tr key={box.id} className="border-b border-command-border/40 hover:bg-cyan-950/20 transition">
+                      <td className="py-2 px-3 text-slate-400 text-[11px]">{new Date().toLocaleTimeString()}</td>
+                      <td className="py-2 px-3 font-bold text-cyan-400">{selectedCam.id}</td>
+                      <td className="py-2 px-3 font-extrabold text-amber-300">{box.plate}</td>
+                      <td className="py-2 px-3 text-slate-200">{box.label} ({Math.round(box.conf * 100)}%)</td>
+                      <td className="py-2 px-3 font-bold text-slate-300">OWNER: {box.owner}</td>
+                      <td className={`py-2 px-3 font-extrabold ${box.isSpeeding ? 'text-rose-400 animate-pulse' : 'text-emerald-400'}`}>
+                        {box.speed} KM/H
+                      </td>
+                      <td className="py-2 px-3">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                          box.isWanted
+                            ? 'bg-rose-950 text-rose-300 border border-rose-500 animate-pulse'
+                            : 'bg-emerald-950 text-emerald-300 border border-emerald-600'
+                        }`}>
+                          {box.statusTag}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
